@@ -213,6 +213,26 @@ body.teacher-active .stage,body.teacher-active .orb,body.teacher-active .grain,b
 @keyframes cheerGlow{0%,100%{box-shadow:0 0 0 0 #f0a8c900}50%{box-shadow:0 0 0 8px #f0a8c922}}
 @media(max-width:640px){.bridge-grid{grid-template-columns:1fr}.bridge-card{padding:12px}.bridge-icon{width:80px;height:80px;font-size:42px}}
 @media print{#bridgeScreen{display:none!important}}
+
+/* Personal pink heartbeat between each question */
+.love-bridge{max-width:760px;gap:clamp(6px,1.1vh,14px);padding:8px 0}
+.love-eyebrow{font-family:'El Messiri',serif;font-size:clamp(13px,2vw,19px);color:#bb6c95;letter-spacing:.2px}
+.love-bridge .bridge-title{font-size:clamp(29px,4.2vw,47px);margin:0;color:#a63b75;text-shadow:0 10px 24px #e3b5ce77}
+.love-message{max-width:670px;margin:0;font-family:'El Messiri',serif;font-weight:600;line-height:1.85;text-align:center;color:#874a6d;font-size:clamp(19px,3vw,29px)}
+.love-score{background:linear-gradient(135deg,#fffafc,#ffe7f2);border:1px solid #e9b1cf;border-radius:24px;padding:clamp(10px,1.6vw,18px) clamp(18px,3vw,34px);display:flex;align-items:center;flex-direction:column;gap:3px;box-shadow:0 17px 40px #d47fa52b;min-width:min(310px,95%)}
+.love-score>span{color:#935271;font-weight:800;font-size:clamp(12px,1.5vw,16px)}
+.love-score strong{font-family:'El Messiri',serif;color:#b83b80;font-size:clamp(42px,7vw,71px);line-height:1.18;direction:ltr;text-shadow:0 7px 18px #c663a054}
+.love-score small{font-size:.36em;color:#a46a87}
+.love-bridge .bridge-cheer{margin:0;padding:9px 18px;font-size:clamp(15px,2vw,21px)}
+.love-next{font-size:clamp(12px,1.5vw,16px);color:#9c6480}
+.love-next strong{color:#ba407c;font-size:1.2em}
+.love-bridge .bridge-icon{width:clamp(58px,9vh,105px);height:clamp(58px,9vh,105px);font-size:clamp(30px,5vh,59px)}
+.love-bridge .bridge-timer{width:49px;height:49px;margin:0}
+.love-bridge .bridge-timer svg{width:49px;height:49px}
+.love-bridge .bridge-timer span{font-size:22px;color:#c35d95}
+.love-bridge .bridge-skip{margin:0}
+@media(max-height:660px){.love-bridge{gap:5px}.love-message{font-size:clamp(16px,2.4vw,23px);line-height:1.55}.love-score{padding:7px 13px}.love-score strong{font-size:clamp(32px,5vh,48px)}.love-bridge .bridge-icon{width:48px;height:48px;font-size:28px}.love-bridge .bridge-timer{display:none}}
+@media(max-width:520px){.love-message{font-size:clamp(17px,4.7vw,23px)}.love-score{min-width:0;width:88%;padding:10px}.love-bridge .bridge-cheer{font-size:15px;padding:7px 10px}.love-bridge .bridge-skip{padding:8px 15px}}
 </style></head><body>
 
 <!-- ===== شريط اسم المدرسة الأنيق والبارز ===== -->
@@ -237,7 +257,7 @@ body.teacher-active .stage,body.teacher-active .orb,body.teacher-active .grain,b
 <section id="quizScreen" class="screen"><div class="fit-inner"><div class="quiz-layout"><div class="quiz-top"><div class="quiz-greeting">رحلة الوعي مع<strong id="greetingName">ضيفتنا العزيزة</strong></div><span class="pill">🎗 أكتوبر الوردي | قسم الفيزياء</span></div><div class="progress-head"><span id="qCounter">السؤال 1 من 10</span><span id="scoreLabel">0 نقطة</span></div><div class="bar" role="progressbar" aria-label="تقدم المسابقة" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" id="progressBar"><div class="bar-fill" id="barFill"></div></div><div class="timer-wrap" id="timerWrap"><svg viewBox="0 0 110 110"><circle class="timer-bg" cx="55" cy="55" r="45"/><circle class="timer-progress" id="timerCircle" cx="55" cy="55" r="45"/></svg><div><div class="timer-n" id="timerNumber" aria-live="off">20</div><div class="timer-text">ثانية</div></div></div><p class="category" id="categoryLabel">الفيزياء والحياة</p><h2 class="question" id="questionText">السؤال</h2><div class="choices" id="choices"></div><div id="feedback" class="feedback hide" aria-live="polite"></div><div class="quiz-actions"><button id="nextButton" class="main-btn next-btn" type="button">السؤال التالي ←</button></div><div class="points">لكل إجابة صحيحة 10 نقاط · المعرفة دائمًا مكسب</div></div></div></section>
 
 <!-- ===== شاشة الانتقال بين الأسئلة ===== -->
-<section id="bridgeScreen" class="screen"><div class="fit-inner"><div class="bridge-wrap"><div class="bridge-icon" id="bridgeIcon">🔬</div><h2 class="bridge-title" id="bridgeTitle"></h2><div class="bridge-grid"><div class="bridge-card physics"><span class="bridge-tag">⚛️ الفيزياء</span><p id="bridgePhysics"></p></div><div class="bridge-card breast"><span class="bridge-tag">🎗️ سرطان الثدي</span><p id="bridgeBreast"></p></div></div><p class="bridge-cheer" id="bridgeCheer"></p><div class="bridge-timer"><svg viewBox="0 0 60 60"><circle class="bt-bg" cx="30" cy="30" r="26"/><circle class="bt-fill" id="bridgeTimerCircle" cx="30" cy="30" r="26"/></svg><span id="bridgeCount">4</span></div><button class="bridge-skip" id="bridgeSkip" type="button">تخطّي الرسالة ←</button></div></div></section>
+<section id="bridgeScreen" class="screen"><div class="fit-inner"><div class="bridge-wrap love-bridge"><div class="bridge-icon" id="bridgeIcon">🎀</div><span class="love-eyebrow">✦ لحظة من القلب ✦</span><h2 class="bridge-title" id="bridgeTitle">نبضة وردية</h2><p class="love-message" id="bridgeLove">كوني بخير… فهناك قلوب تنبض بحبكِ.</p><div class="love-score"><span>رصيدكِ الوردي حتى الآن</span><strong id="bridgeScore">0 <small>/ 100</small></strong><span id="bridgeScoreDetail">من 10 أسئلة</span></div><p class="bridge-cheer" id="bridgeCheer">أنتِ رائعة… تابعي بثقة 💗</p><div class="love-next">السؤال التالي بعد <strong id="bridgeCount">5</strong> ثوانٍ</div><div class="bridge-timer"><svg viewBox="0 0 60 60"><circle class="bt-bg" cx="30" cy="30" r="26"/><circle class="bt-fill" id="bridgeTimerCircle" cx="30" cy="30" r="26"/></svg><span>♥</span></div><button class="bridge-skip" id="bridgeSkip" type="button">متابعة المسابقة ←</button></div></div></section>
 
 <section id="resultScreen" class="screen"><div class="fit-inner"><div class="result"><div class="winner-icon" aria-hidden="true">🎗️</div><span class="eyebrow">✦ اكتملت رحلة الوعي</span><h2>أنتِ جزء من الحكاية الوردية</h2><div id="resultName" class="participant"></div><div class="score-big"><span id="finalScore">0</span><small> / 100</small></div><p id="resultMessage" class="result-message"></p><div class="certificate" id="certificate"><div class="certificate-title">شهادة تقدير ومشاركة</div><p class="cert-small">تفتخر مدرسة العب الثانوية للبنات – قسم الفيزياء بمشاركة</p><div class="cert-name" id="certName"></div><p class="cert-small" id="certMeta"></p><p class="cert-small">في مسابقة «نبض وردي» بمناسبة أكتوبر الوردي 2026<br>لأن الوعي بداية العناية، والمشاركة تصنع الأثر.</p><div style="font-size:22px;color:#bc5c8d;margin-top:8px">✦ 🎗 ✦</div></div><div class="result-buttons"><button class="main-btn" id="printButton" type="button">طباعة شهادة المشاركة</button><button class="main-btn secondary" id="replayButton" type="button">المشاركة مرة أخرى ↻</button></div><p class="source">محتوى تثقيفي عام لا يحل محل المشورة الطبية. للمزيد: <a href="https://www.who.int/news-room/fact-sheets/detail/breast-cancer" target="_blank" rel="noopener">منظمة الصحة العالمية</a> · <a href="https://www.cdc.gov/breast-cancer/symptoms/index.html" target="_blank" rel="noopener">CDC</a></p></div></div></section>
 </div></main><div class="toast" id="toast" role="status"></div>
@@ -274,7 +294,7 @@ const BRIDGE_MESSAGES = [
 const PINK_STORAGE_KEY='pink_pulse_2026_responses';let answerLog=[],savedResult=false;
 const $=id=>document.getElementById(id);let role='ولي أمر',person='',daughter='',grade='',index=0,score=0,answered=false,interval=null,remaining=20,deadline=0;const DURATION=20;
 let bridgeTimer=null, bridgeDeadline=0;
-const BRIDGE_DURATION=4;
+const BRIDGE_DURATION=5;
 
 function enterFullscreen(){const el=document.documentElement;if(!document.fullscreenElement&&el.requestFullscreen){el.requestFullscreen().catch(()=>{});}}
 function toggleFullscreen(){if(document.fullscreenElement&&document.exitFullscreen){document.exitFullscreen().catch(()=>{});}else{enterFullscreen();}}
@@ -295,12 +315,25 @@ function handleAnswer(choice){if(answered)return;answered=true;stopTimer();answe
 
 // ===== منطق شاشة الانتقال =====
 function showBridge(nextIndex){
-  const msg=BRIDGE_MESSAGES[nextIndex % BRIDGE_MESSAGES.length];
-  $('bridgeIcon').textContent=msg.icon;
-  $('bridgeTitle').textContent=msg.title;
-  $('bridgePhysics').textContent=msg.physics;
-  $('bridgeBreast').textContent=msg.breast;
-  $('bridgeCheer').textContent=msg.cheer;
+  const loveMessages=[
+    'وجودكِ نعمة في حياة من يحبونكِ… فاهتمي بنفسكِ كما تهتمين بهم.',
+    'في كل قلب يحبكِ دعوة بأن تبقي بخير… صحتكِ تستحق اهتمامكِ.',
+    'يا أجمل نبض في بيتكِ… امنحي نفسكِ بعض الحب والطمأنينة.',
+    'لا تؤجّلي الاهتمام بنفسكِ؛ فأنتِ تستحقين الرعاية كل يوم.',
+    'ابتسامتكِ تصنع دفئًا في القلوب… ووعيكِ يضيء الطريق.',
+    'كل خطوة نحو المعرفة رسالة حب منكِ لنفسكِ ولأسرتكِ.',
+    'طمأنينتكِ ثمينة… اسألي، تعلّمي، واهتمي بصحتكِ برفق.',
+    'أنتِ لستِ وحدكِ؛ الحب والمساندة يجعلان الطريق ألطف.',
+    'اجعلي الاهتمام بصحتكِ عادة جميلة، لا موعدًا مؤجّلًا.'
+  ];
+  const justAnswered=answerLog[nextIndex-1];
+  const correct=justAnswered===QUESTIONS[nextIndex-1].ok;
+  $('bridgeIcon').textContent=correct?'💗':'🎀';
+  $('bridgeTitle').textContent='نبضة وردية';
+  $('bridgeLove').textContent=loveMessages[(nextIndex-1)%loveMessages.length];
+  $('bridgeScore').innerHTML=String(score)+' <small>/ 100</small>';
+  $('bridgeScoreDetail').textContent='أكملتِ '+nextIndex+' من 10 أسئلة';
+  $('bridgeCheer').textContent=correct?'أحسنتِ! +10 نقاط… أنتِ تتألقين، استمري! ✨':justAnswered===-1?'لا بأس بانتهاء الوقت… قيمتكِ أكبر من أي نتيجة، تابعي بثقة 🌷':'كل سؤال فرصة جديدة للتعلّم… أنتِ رائعة مهما كانت النقاط 🌷';
   $('bridgeCount').textContent=BRIDGE_DURATION;
   $('bridgeTimerCircle').style.strokeDashoffset='0';
   showScreen('bridgeScreen');
