@@ -415,7 +415,7 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden)return;if(i
  if(!reduce.matches&&matchMedia('(hover:hover) and (pointer:fine)').matches){
   const panel=document.querySelector('.registration');
   panel.addEventListener('pointermove',e=>{
-   const r=panel.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;https://github.com/Hafsa-hub-dot/pinkoct/blob/main/index.html
+   const r=panel.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
    panel.style.transform=`perspective(1100px) rotateY(${x*3}deg) rotateX(${-y*3}deg) translateZ(6px)`;
    panel.style.setProperty('--mx',`${(x+.5)*100}%`);
    panel.style.setProperty('--my',`${(y+.5)*100}%`);
