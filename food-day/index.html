@@ -107,10 +107,32 @@ h1{margin:0;font-size:clamp(37px,5.8vw,95px);line-height:1.2;color:var(--pine)}h
  .round-podium-heading h1{font-size:clamp(27px,6vw,46px)}.round-podium-heading span{font-size:18px}.round-podium-card{border-radius:15px;padding:5px;gap:3px}.round-medal{font-size:30px}.round-name{font-size:clamp(11px,3vw,19px)}.round-points{font-size:23px}.round-pct{font-size:13px}.rest-chip{font-size:11px;padding:4px 7px}
 }
 @media(max-height:650px){.reveal-question{font-size:clamp(23px,5vh,42px);max-height:20vh}.reveal-answer strong{font-size:clamp(23px,6vh,46px)}.round-podium-heading h1{font-size:clamp(27px,6vh,46px)}.round-podium{max-height:43vh}.round-medal{font-size:clamp(30px,7vh,54px)}}
+
+/* يوتيوب: مشغل ظاهر يفي بالحد الأدنى 200 × 200 ويظهر مع السؤال فقط. */
+.youtube-dock{display:none;position:fixed;z-index:55;left:clamp(10px,2vw,30px);bottom:clamp(10px,2vh,25px);width:228px;padding:7px;background:#fffefa;border:2px solid #d5e7d1;border-radius:18px;box-shadow:0 12px 32px #123d3060;direction:rtl}
+.youtube-dock.show{display:block}
+.youtube-dock.preview{z-index:91;left:12px;right:auto;top:10px;bottom:auto}
+.youtube-dock h3{font:700 14px var(--head);margin:0 0 5px;color:#1a5b41;text-align:center}
+.youtube-video{width:210px;height:210px;overflow:hidden;border-radius:11px;background:#182b21;margin:0 auto}
+.youtube-video iframe{width:210px!important;height:210px!important;border:0}
+.youtube-dock .yt-help{display:block;width:100%;font:700 13px var(--head);padding:6px 5px;background:#e9f7e8;color:#155b3d;border:1px solid #b9d7b8;border-radius:9px;margin-top:6px;text-align:center;cursor:pointer}
+.view.youtube-layout .main{padding-left:240px}
+.view.youtube-layout .question-text{font-size:clamp(33px,3.9vw,71px)}
+.youtube-input{width:100%;padding:9px;border:1px solid #bcdac4;border-radius:11px;background:white;color:#255a3b;direction:ltr;text-align:left;font:14px Arial,sans-serif}
+.music-tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.music-tabs .tool-icon.active{background:#dff4e7;border-color:#2b986d;color:#09573c}
+@media(max-width:760px){.youtube-dock{width:215px;bottom:8px;left:8px;padding:5px}.view.youtube-layout .main{padding-left:0}.youtube-dock.show{display:block}
+.youtube-dock.preview{z-index:91;left:12px;right:auto;top:10px;bottom:auto}}
 </style>
 </head>
 <body>
 <div id="app"><div class="view" id="view"></div></div>
+<!-- المشغّل مستقل عن منطقة إعادة رسم الشرائح، حتى لا يُنشأ من جديد كل ثانية. -->
+<aside id="youtubeDock" class="youtube-dock" aria-label="مشغّل يوتيوب للمسابقة">
+  <h3>🎶 صوت السؤال · YouTube</h3>
+  <div class="youtube-video" id="youtubePlayerSlot"></div>
+  <button type="button" class="yt-help" id="youtubeStartButton">▶ تفعيل تشغيل الصوت</button>
+</aside>
 <script>
 'use strict';
 /* ضعي رابط Realtime Database الحقيقي هنا. اتركيه فارغًا لتجربة التبويبات على الجهاز نفسه. */
@@ -232,6 +254,123 @@ function welcome(){return frame('مدرسة العب الثانوية للبنا
 /* موسيقى الأسئلة: تحفظ في جهاز السبورة فقط بقاعدة IndexedDB المحلية */
 let musicOpen=false,musicBlob=null,musicName='',musicStatus='',musicEnabled=true;
 let musicVolume=.82,musicObjectURL='',musicArmedRound=-1,musicActiveRound=-1,musicPending=false;
+/* الرابط الذي اختير لهذه المسابقة يعمل افتراضيًا، ويمكن تغييره من شاشة السبورة. */
+const DEFAULT_YOUTUBE_URL='https://www.youtube.com/watch?v=aRtrd-VD--g';
+const YOUTUBE_KEY='foodDaySchoolYoutubeLinkV1',MODE_KEY='foodDaySchoolMusicModeV1';
+let musicMode=localStorage.getItem(MODE_KEY)||'youtube';
+let youtubeUrl=localStorage.getItem(YOUTUBE_KEY)||DEFAULT_YOUTUBE_URL;
+let youtubeId=youtubeVideoId(youtubeUrl)||'aRtrd-VD--g';
+let ytPlayer=null,ytReady=false,ytLoading=false,ytArmedRound=-1,ytActiveRound=-1,ytPreview=false,ytPlaybackPhase='idle',ytStatus='';
+function youtubeVideoId(url){
+ try{const u=new URL(url);const host=u.hostname.toLowerCase().replace(/^www\./,'');
+  const id=host==='youtu.be'?u.pathname.slice(1).split('/')[0]:
+    (host==='youtube.com'||host==='m.youtube.com'||host==='youtube-nocookie.com')?
+      (u.searchParams.get('v')||u.pathname.match(/^\/(?:embed|shorts|live)\/([^/?]+)/)?.[1]):null;
+  return /^[\w-]{11}$/.test(id||'')?id:null;
+ }catch{return null}
+}
+function showYoutubeDock(show){
+ const dock=document.getElementById('youtubeDock');
+ dock.classList.toggle('show',Boolean(show));
+ dock.classList.toggle('preview',Boolean(ytPreview&&musicOpen));
+}
+function ensureYoutube(){
+ if(ytPlayer||ytLoading)return;
+ if(window.YT?.Player){createYoutube();return}
+ ytLoading=true;
+ const script=document.createElement('script');
+ script.src='https://www.youtube.com/iframe_api';
+ script.onerror=()=>{ytLoading=false;ytStatus='لم يتم تحميل مشغّل يوتيوب؛ يمكن استخدام ملف MP3';};
+ document.head.appendChild(script);
+}
+window.onYouTubeIframeAPIReady=()=>{ytLoading=false;createYoutube()};
+function createYoutube(){
+ if(ytPlayer||!window.YT?.Player)return;
+ ytPlayer=new YT.Player('youtubePlayerSlot',{
+  width:210,height:210,videoId:youtubeId,
+  playerVars:{controls:1,playsinline:1,rel:0,origin:location.protocol.startsWith('http')?location.origin:undefined},
+  events:{
+   onReady:()=>{ytReady=true;try{ytPlayer.setVolume(Math.round(musicVolume*100));ytPlayer.pauseVideo()}catch(e){} youtubeSync(true)},
+   onError:e=>{ytStatus='تعذر تشغيل فيديو يوتيوب ('+e.data+'). قد يمنع صاحبه التضمين. استخدمي MP3 كبديل.';musicStatus=ytStatus;},
+   onStateChange:e=>{
+    if(e.data===0&&stage()==='question'&&view==='screen'&&musicMode==='youtube'&&ytActiveRound===index()){
+      try{ytPlayer.seekTo(0,true);ytPlayer.playVideo()}catch(err){}
+    }
+   }
+  }
+ });
+}
+function youtubeArm(i){
+ if(view!=='screen'||!musicEnabled)return;
+ ytArmedRound=i;ytActiveRound=-1;ytPlaybackPhase='idle';ytPreview=false;
+ showYoutubeDock(true);
+ ensureYoutube();
+ if(ytReady){
+  /* بدء صامت بلمسة زر «ابدئي السؤال» لزيادة فرص السماح بالصوت لاحقًا. */
+  try{ytPlayer.mute();ytPlayer.seekTo(0,true);ytPlayer.playVideo();ytPlaybackPhase='ready'}catch(e){}
+ }
+}
+function youtubeStop(){
+ ytPreview=false;ytActiveRound=-1;ytPlaybackPhase='idle';
+ if(ytReady){try{ytPlayer.pauseVideo();ytPlayer.seekTo(0,true);ytPlayer.mute()}catch(e){}}
+ showYoutubeDock(false);
+}
+function youtubeSync(force=false){
+ const s=stage(),i=index();
+ const active=view==='screen'&&musicMode==='youtube'&&musicEnabled;
+ const primed=active&&i===ytArmedRound&&(s==='ready'||s==='question');
+ const watching=active&&s==='question';
+ const preview=active&&ytPreview&&musicOpen;
+ const visible=primed||watching||preview;
+ showYoutubeDock(visible);
+ $('#view')?.classList.toggle('youtube-layout',watching);
+ if(!ytReady)return;
+ if(!visible){
+  if(force||ytPlaybackPhase!=='idle')youtubeStop();
+  return;
+ }
+ if(preview){
+  if(force||ytPlaybackPhase!=='preview'){
+   ytPlaybackPhase='preview';
+   try{ytPlayer.unMute();ytPlayer.setVolume(Math.round(musicVolume*100));ytPlayer.playVideo()}catch(e){}
+  }
+  return;
+ }
+ if(s==='ready'){
+  if(force||ytPlaybackPhase!=='ready'){
+   ytPlaybackPhase='ready';
+   try{ytPlayer.mute();ytPlayer.seekTo(0,true);ytPlayer.playVideo()}catch(e){}
+  }
+ }else if(watching){
+  if(force||ytPlaybackPhase!=='question'||ytActiveRound!==i){
+   ytPlaybackPhase='question';ytActiveRound=i;
+   try{ytPlayer.seekTo(0,true);ytPlayer.setVolume(Math.round(musicVolume*100));ytPlayer.unMute();ytPlayer.playVideo()}catch(e){}
+  }
+ }
+}
+function activateYoutube(){
+ musicMode='youtube';localStorage.setItem(MODE_KEY,'youtube');
+ ytPreview=true;showYoutubeDock(true);ensureYoutube();
+ if(ytReady){
+  try{ytPlayer.seekTo(0,true);ytPlayer.setVolume(Math.round(musicVolume*100));ytPlayer.unMute();ytPlayer.playVideo()}catch(e){}
+  ytPlaybackPhase='preview';
+ }
+ musicStatus='إذا منع المتصفح التشغيل التلقائي، اضغطي تشغيل داخل مشغّل يوتيوب. أثناء الأسئلة يعاد تشغيل المقطع من البداية.';
+ render(true);
+ youtubeSync(true);
+}
+function setYoutubeLink(){
+ let value=document.getElementById('youtubeUrlInput')?.value||'';
+ const id=youtubeVideoId(value);
+ if(!id){musicStatus='رابط يوتيوب غير صحيح؛ الصقي رابط فيديو عادي.';render(true);return}
+ youtubeUrl=value;youtubeId=id;localStorage.setItem(YOUTUBE_KEY,youtubeUrl);
+ musicMode='youtube';localStorage.setItem(MODE_KEY,'youtube');
+ ytPreview=false;ytArmedRound=-1;ytPlaybackPhase='idle';
+ if(ytReady){try{ytPlayer.cueVideoById(youtubeId);ytPlayer.pauseVideo()}catch(e){}}
+ musicStatus='✓ تم اعتماد فيديو يوتيوب للمسابقة — جاهز للأسئلة';
+ render(true);
+}
+
 const musicPlayer=new Audio();
 musicPlayer.loop=true;
 musicPlayer.preload='auto';
@@ -244,7 +383,7 @@ async function saveMusic(file){
  if(!file)return;
  if(!file.type.startsWith('audio/')&&!/\.(mp3|wav|m4a|ogg|aac|opus)$/i.test(file.name)){musicStatus='اختاري ملف صوت MP3 أو WAV أو M4A';render(true);return}
  if(file.size>25*1024*1024){musicStatus='الحد الأقصى لملف الموسيقى هو 25 MB';render(true);return}
- try{let db=await openMusicDB();await new Promise((resolve,reject)=>{let t=db.transaction('files','readwrite');t.objectStore('files').put({blob:file,name:file.name},'boardMusic');t.oncomplete=resolve;t.onerror=()=>reject(t.error)});db.close();installMusic(file,file.name);musicStatus='✓ تم حفظ الموسيقى، وستعمل مع كل سؤال على جهاز السبورة';}catch(e){installMusic(file,file.name);musicStatus='الموسيقى تعمل الآن لكن لم تُحفظ بعد إعادة فتح المتصفح: '+e.message}
+ try{let db=await openMusicDB();await new Promise((resolve,reject)=>{let t=db.transaction('files','readwrite');t.objectStore('files').put({blob:file,name:file.name},'boardMusic');t.oncomplete=resolve;t.onerror=()=>reject(t.error)});db.close();installMusic(file,file.name);musicMode='file';localStorage.setItem(MODE_KEY,'file');youtubeStop();musicStatus='✓ تم حفظ ملف الصوت وسيعمل مع كل سؤال على جهاز السبورة';}catch(e){installMusic(file,file.name);musicStatus='الموسيقى تعمل الآن لكن لم تُحفظ بعد إعادة فتح المتصفح: '+e.message}
  render(true);
 }
 async function removeMusic(){
@@ -253,6 +392,8 @@ async function removeMusic(){
 }
 function stopMusic(){musicPlayer.pause();try{musicPlayer.currentTime=0}catch(e){}musicActiveRound=-1;musicPending=false}
 function armMusic(i){
+ if(musicMode==='youtube'){stopMusic();youtubeArm(i);return}
+ youtubeStop();
  if(view!=='screen'||!musicPlayer.src||!musicEnabled)return;
  musicArmedRound=i;musicActiveRound=-1;musicPending=true;
  try{musicPlayer.pause();musicPlayer.currentTime=0;musicPlayer.volume=0;
@@ -260,7 +401,9 @@ function armMusic(i){
  }catch(e){musicStatus='تعذّر تشغيل الصوت: '+e.message}
 }
 function tickMusic(){
- if(view!=='screen')return;
+ if(view!=='screen'){if(ytPlaybackPhase!=='idle')youtubeStop();return}
+ if(musicMode==='youtube'){youtubeSync();if(!musicPlayer.paused)stopMusic();return}
+ if(ytPlaybackPhase!=='idle')youtubeStop();
  const s=stage(),i=index();
  if(s==='question'&&musicArmedRound===i&&musicPlayer.src&&musicEnabled){
   if(musicActiveRound!==i){musicActiveRound=i;musicPending=false;try{musicPlayer.currentTime=0;musicPlayer.volume=musicVolume;if(musicPlayer.paused)musicPlayer.play().catch(()=>{musicStatus='المتصفح منع الصوت تلقائيًا';})}catch(e){}}
@@ -268,7 +411,23 @@ function tickMusic(){
   if(!musicPlayer.paused)stopMusic();
  }
 }
-function settingsModal(){return `<div class="music-overlay" role="dialog" aria-modal="true" aria-label="إعداد الموسيقى"><div class="music-modal"><h2>🎵 موسيقى التحدّي</h2><p>اختاري ملف الموسيقى مرة واحدة على <b>جهاز السبورة</b>. سيُحفظ هنا ويُعاد من بدايته عند ظهور كل سؤال، ويتوقف عند النتائج.</p><div class="music-current">${musicName?'🎵 '+ESC(musicName):'لم تختاري موسيقى بعد'}<br><small>${ESC(musicStatus)}</small></div><label class="music-file-button" for="musicUpload">📂 اختيار أو استبدال ملف الموسيقى<input id="musicUpload" type="file" accept="audio/*,.mp3,.wav,.m4a,.ogg" hidden></label><div><label>🔊 مستوى الصوت <strong>${Math.round(musicVolume*100)}%</strong></label><input type="range" min="0" max="100" step="5" value="${Math.round(musicVolume*100)}" id="musicVolume"></div><div class="row"><button class="btn pale" data-action="preview-music" ${musicName?'':'disabled'}>▶ تجربة الصوت</button><button class="btn pale" data-action="stop-music">⏹ إيقاف</button><button class="btn danger" data-action="remove-music" ${musicName?'':'disabled'}>حذف الموسيقى</button></div><p class="board-live-note">الصوت على السبورة فقط، ولا ينتقل إلى جوالات المعلمات. بعد اختيار الملف لا تحتاجين لإعادة رفعه مع كل سؤال.</p><button class="btn" data-action="close-settings">العودة إلى السبورة ✓</button></div></div>`}
+function settingsModal(){
+ const ytActive=musicMode==='youtube',fileActive=musicMode==='file';
+ return `<div class="music-overlay" role="dialog" aria-modal="true" aria-label="إعداد الموسيقى"><div class="music-modal"><h2>🎵 موسيقى تحدّي الغذاء الذكي</h2>
+ <p>تم تجهيز فيديو يوتيوب الذي أرسلتِه. يعمل <b>صوتُه أثناء السؤال فقط (20 ثانية)</b> ويتوقف في الاستعداد وكشف الإجابة والتتويج.</p>
+ <div class="music-tabs"><button class="tool-icon ${ytActive?'active':''}" data-action="use-youtube">▶ يوتيوب</button><button class="tool-icon ${fileActive?'active':''}" data-action="use-file">🎼 ملف MP3</button></div>
+ <label>رابط فيديو YouTube</label>
+ <input class="youtube-input" id="youtubeUrlInput" type="url" value="${ESC(youtubeUrl)}" dir="ltr" aria-label="رابط فيديو يوتيوب">
+ <div class="row"><button class="btn pale" data-action="save-youtube">اعتماد رابط يوتيوب</button><button class="btn gold" data-action="preview-youtube">▶ تفعيل وتجربة يوتيوب</button></div>
+ <div class="music-current">🎶 ${ytActive?'المصدر الحالي: يوتيوب':'المصدر الحالي: ملف صوتي'}<br><small>${ESC(musicStatus||ytStatus||'يمكن النقر على مشغل يوتيوب الظاهر إن منع المتصفح الصوت تلقائيًا')}</small></div>
+ <label class="music-file-button" for="musicUpload">📂 خيار بديل: تحميل موسيقى MP3<input id="musicUpload" type="file" accept="audio/*,.mp3,.wav,.m4a,.ogg" hidden></label>
+ <div><label>🔊 مستوى الصوت <strong>${Math.round(musicVolume*100)}%</strong></label><input type="range" min="0" max="100" step="5" value="${Math.round(musicVolume*100)}" id="musicVolume"></div>
+ <div class="row"><button class="btn pale" data-action="preview-music" ${musicName?'':'disabled'}>▶ تجربة ملف MP3</button><button class="btn pale" data-action="stop-music">⏹ إيقاف</button><button class="btn danger" data-action="remove-music" ${musicName?'':'disabled'}>حذف ملف MP3</button></div>
+ <p class="board-live-note">للالتزام بمتطلبات يوتيوب، يظهر مشغّل فيديو صغير على السبورة عند استخدام رابط يوتيوب. الصوت لا ينتقل إلى جوالات المشاركات. إذا كان الفيديو يمنع التضمين، استخدمي ملف MP3.</p>
+ <button class="btn" data-action="close-settings">العودة إلى السبورة ✓</button>
+ </div></div>`;
+}
+
 function boardTools(s){
  if(s==='ready'||s==='question')return '';
  const inLobby=s==='lobby',inReveal=s==='reveal',inPodium=s==='podium',last=index()===Q.length-1;
@@ -276,7 +435,7 @@ function boardTools(s){
     :inReveal?'<button class="btn gold control-main" data-action="podium">🏆 شريحة التتويج التراكمي</button>'
     :inPodium?(last?'<button class="btn gold control-main" data-action="final">🏆 عرض النتائج النهائية</button>':`<button class="btn control-main" data-action="next">🚀 ابدئي السؤال ${index()+2}</button>`)
     :s==='final'?'<button class="btn gold" data-action="reset">↺ جولة جديدة</button>':'';
- return `<div class="screen-tools"><span class="tool-info">🎛️ السبورة والتحكّم في شاشة واحدة</span>${button}<button class="tool-icon" data-action="settings">🎵 ${musicName?'الموسيقى جاهزة':'إضافة موسيقى'}</button><button class="tool-icon" data-action="fullscreen">⛶ ملء الشاشة</button><button class="tool-icon" data-action="reset" title="تصفير نتائج الجولة">↻</button></div>`;
+ return `<div class="screen-tools"><span class="tool-info">🎛️ السبورة والتحكّم في شاشة واحدة</span>${button}<button class="tool-icon" data-action="settings">🎵 ${musicMode==='youtube'?'يوتيوب جاهز':musicName?'الموسيقى جاهزة':'إضافة موسيقى'}</button><button class="tool-icon" data-action="fullscreen">⛶ ملء الشاشة</button><button class="tool-icon" data-action="reset" title="تصفير نتائج الجولة">↻</button></div>`;
 }
 function screen(){
  const s=stage();
@@ -286,14 +445,14 @@ function screen(){
 }
 function render(force=false){
  const s=stage(), dynamic=(s==='lobby'||s==='reveal'||s==='podium'||s==='final');
- const key=[view,s,index(),joinType,musicOpen,musicName,
+ const key=[view,s,index(),joinType,musicOpen,musicName,musicMode,youtubeUrl,
     view==='teacher'?me+'|'+Boolean(validAnswer(index(),me))+'|'+Boolean(state.classes?.[me]):'',
     dynamic?JSON.stringify([state.classes,state.answers]):''
  ].join('|');
  if(!force&&key===renderKey)return;
  renderKey=key;
  $('#view').innerHTML=view==='teacher'?teacher():view==='screen'?screen():welcome();
- requestAnimationFrame(()=>{fit();drawClock()});
+ requestAnimationFrame(()=>{fit();drawClock();if(view==='screen'&&musicMode==='youtube')youtubeSync()});
 }
 function fit(){document.querySelectorAll('.question-text,.choice .label').forEach(el=>{el.style.fontSize='';let p=el.closest('.question,.choice');let fs=parseFloat(getComputedStyle(el).fontSize);while(fs>23&&(el.scrollHeight>p.clientHeight-14||el.scrollWidth>p.clientWidth-28)){fs--;el.style.fontSize=fs+'px'}})}
 function drawClock(){let svg=$('#timerSvg'),path=$('#timerPath'),lab=$('#clockNum');if(!svg||!path||!lab)return;let s=stage();if(s!=='question')return;let w=svg.clientWidth,h=svg.clientHeight;if(w<20||h<20)return;svg.setAttribute('viewBox',`0 0 ${w} ${h}`);let pad=5,r=24,x=pad,y=pad,W=w-2*pad,H=h-2*pad;path.setAttribute('d',`M ${x+r} ${y} H ${x+W-r} Q ${x+W} ${y} ${x+W} ${y+r} V ${y+H-r} Q ${x+W} ${y+H} ${x+W-r} ${y+H} H ${x+r} Q ${x} ${y+H} ${x} ${y+H-r} V ${y+r} Q ${x} ${y} ${x+r} ${y}`);let L=path.getTotalLength(),rem=Math.max(0,deadline()-Date.now())/QUESTION_MS;path.style.strokeDasharray=`${L*rem} ${L}`;let sec=remaining('question');lab.textContent='⏱️ '+sec+' ث';lab.classList.toggle('urgent',sec<=5)}
@@ -340,12 +499,24 @@ async function openPodium(){
 async function final(){if(busy||stage()!=='podium'||index()!==Q.length-1)return;busy=true;try{await write('live',{phase:'final',index:Q.length-1});render(true)}catch(err){alert(err.message)}finally{busy=false}}
 async function reset(){if(!confirm('هل تريدين تصفير النقاط وإعادة المسابقة مع إبقاء الصفوف المسجلة؟'))return;busy=true;try{await updateRoot({live:{phase:'lobby',index:-1},rounds:null,answers:null});render(true)}catch(err){alert('تعذّر التصفير: '+err.message)}finally{busy=false}}
 document.addEventListener('submit',e=>{if(e.target.id==='joinForm')join(e)});
-document.addEventListener('input',e=>{if(e.target.id==='classInput')draft=e.target.value;if(e.target.id==='musicVolume'){musicVolume=Number(e.target.value)/100;musicPlayer.volume=musicActiveRound>=0?musicVolume:0;const label=e.target.previousElementSibling?.querySelector('strong');if(label)label.textContent=Math.round(musicVolume*100)+'%'}});document.addEventListener('change',e=>{if(e.target.id==='musicUpload'){saveMusic(e.target.files?.[0])}});
-document.addEventListener('click',e=>{let b=e.target.closest('[data-action]');if(!b)return;let action=b.dataset.action;if(action==='view')setView(b.dataset.to);else if(action==='role'){joinType=b.dataset.role;draft='';render(true)}else if(action==='fill'){draft=b.dataset.name;let el=$('#classInput');if(el){el.value=draft;el.focus()}}else if(action==='answer')answer(Number(b.dataset.choice));else if(action==='settings'){musicOpen=true;render(true)}else if(action==='close-settings'){musicOpen=false;stopMusic();render(true)}else if(action==='preview-music'){if(musicPlayer.src){musicPlayer.currentTime=0;musicPlayer.volume=musicVolume;musicPlayer.play().catch(()=>{musicStatus='لم يسمح المتصفح بتشغيل الصوت';render(true)})}}else if(action==='stop-music')stopMusic();else if(action==='remove-music')removeMusic();else if(action==='next')nextRound();else if(action==='podium')openPodium();else if(action==='final')final();else if(action==='reset')reset();else if(action==='fullscreen'){if(!document.fullscreenElement)document.documentElement.requestFullscreen?.().catch(()=>{});else document.exitFullscreen?.().catch(()=>{})}else if(action==='copy'){let input=document.getElementById(b.dataset.target);navigator.clipboard?.writeText(input?.value||'').then(()=>b.textContent='تم النسخ ✓').catch(()=>prompt('انسخي الرابط',input?.value||''))}});
+document.addEventListener('input',e=>{if(e.target.id==='classInput')draft=e.target.value;if(e.target.id==='musicVolume'){musicVolume=Number(e.target.value)/100;musicPlayer.volume=musicActiveRound>=0?musicVolume:0;if(ytReady){try{ytPlayer.setVolume(Math.round(musicVolume*100))}catch(e){}}const label=e.target.previousElementSibling?.querySelector('strong');if(label)label.textContent=Math.round(musicVolume*100)+'%'}});document.addEventListener('change',e=>{if(e.target.id==='musicUpload'){saveMusic(e.target.files?.[0])}});
+document.addEventListener('click',e=>{let b=e.target.closest('[data-action]');if(!b)return;let action=b.dataset.action;if(action==='view')setView(b.dataset.to);else if(action==='role'){joinType=b.dataset.role;draft='';render(true)}else if(action==='fill'){draft=b.dataset.name;let el=$('#classInput');if(el){el.value=draft;el.focus()}}else if(action==='answer')answer(Number(b.dataset.choice));else if(action==='settings'){musicOpen=true;render(true)}
+ else if(action==='close-settings'){musicOpen=false;ytPreview=false;youtubeStop();stopMusic();render(true)}
+ else if(action==='use-youtube'){musicMode='youtube';localStorage.setItem(MODE_KEY,'youtube');stopMusic();musicStatus='تم اختيار يوتيوب مصدرًا للموسيقى';render(true)}
+ else if(action==='use-file'){musicMode='file';localStorage.setItem(MODE_KEY,'file');youtubeStop();musicStatus=musicName?'تم اختيار ملف MP3':'اختاري ملفًا صوتيًا من جهاز السبورة';render(true)}
+ else if(action==='save-youtube')setYoutubeLink()
+ else if(action==='preview-youtube')activateYoutube()
+ else if(action==='preview-music'){if(musicPlayer.src){musicMode='file';localStorage.setItem(MODE_KEY,'file');youtubeStop();musicPlayer.currentTime=0;musicPlayer.volume=musicVolume;musicPlayer.play().catch(()=>{musicStatus='لم يسمح المتصفح بتشغيل الصوت';render(true)})}}
+ else if(action==='stop-music'){stopMusic();youtubeStop()}else if(action==='remove-music')removeMusic();else if(action==='next')nextRound();else if(action==='podium')openPodium();else if(action==='final')final();else if(action==='reset')reset();else if(action==='fullscreen'){if(!document.fullscreenElement)document.documentElement.requestFullscreen?.().catch(()=>{});else document.exitFullscreen?.().catch(()=>{})}else if(action==='copy'){let input=document.getElementById(b.dataset.target);navigator.clipboard?.writeText(input?.value||'').then(()=>b.textContent='تم النسخ ✓').catch(()=>prompt('انسخي الرابط',input?.value||''))}});
+document.getElementById('youtubeStartButton').addEventListener('click',()=>{
+ musicMode='youtube';localStorage.setItem(MODE_KEY,'youtube');
+ if(ytReady){try{ytPlayer.unMute();ytPlayer.setVolume(Math.round(musicVolume*100));ytPlayer.playVideo()}catch(e){}}
+ else ensureYoutube();
+});
 let lastStage='';setInterval(()=>{let s=stage();tickMusic();if(s!==lastStage){lastStage=s;render(true)}if(s==='ready'){let el=$('#readyNum');if(el)el.textContent=remaining('ready')}if(s==='question')drawClock();if(view==='host'&&(s==='ready'||s==='question')){let el=$('.pill-text');if(el)el.textContent=s==='ready'?'استعداد '+remaining('ready')+' ث':'متبقّي '+remaining('question')+' ث'}},90);
 window.addEventListener('resize',()=>{requestAnimationFrame(()=>{fit();drawClock()})});document.fonts?.ready.then(()=>requestAnimationFrame(fit));
 if(REMOTE){sync();setInterval(sync,1000)}else{state=localRead();window.addEventListener('storage',e=>{if(e.key===KEY){state=localRead();render()}})}
-if(view==='host')view='screen';if(!['welcome','teacher','screen'].includes(view))view='welcome';render(true);savedMusic();
+if(view==='host')view='screen';if(!['welcome','teacher','screen'].includes(view))view='welcome';render(true);savedMusic();if(view==='screen'&&musicMode==='youtube')ensureYoutube();
 </script>
 </body>
 </html>
