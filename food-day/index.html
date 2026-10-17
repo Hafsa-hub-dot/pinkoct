@@ -164,6 +164,28 @@ h1{margin:0;font-size:clamp(37px,5.8vw,95px);line-height:1.2;color:var(--pine)}h
  .board-view .reveal-question{font-size:clamp(32px,5.9vh,56px)}
 }
 
+
+/* خيارات صح وخطأ: خياران يملآن المساحة بدل ترك نصف الشاشة فارغًا */
+.choices.binary-choices{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:minmax(0,1fr)}
+.choices.binary-choices .choice{justify-content:center;text-align:center;background:linear-gradient(135deg,#137a5a,#2aae80)}
+.choices.binary-choices .choice:nth-child(2){background:linear-gradient(135deg,#a42f4e,#e16b83)}
+.choices.binary-choices .choice .label{flex:0 1 auto;text-align:center;font-size:clamp(52px,6vw,105px)}
+.board-view .choices.binary-choices .choice .label{font-size:clamp(72px,7.4vw,140px)}
+/* الجوال: الإجابة فقط، بلا عداد ولا شريط توقيت ولا شرح علمي */
+.phone-feedback{font-size:clamp(52px,11vw,102px);line-height:1.25;max-width:95%;margin:auto;text-align:center}
+.phone-feedback.right{color:#147e55}
+.phone-feedback.wrong{color:#b53551}
+.phone-feedback.waiting{color:#356b5b}
+@media(max-width:760px),(max-aspect-ratio:3/4){
+ .choices.binary-choices{grid-template-columns:1fr;grid-template-rows:repeat(2,minmax(0,1fr))}
+ .choices.binary-choices .choice .label{font-size:clamp(48px,13vw,82px)}
+ .board-view .choices.binary-choices{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:minmax(0,1fr)}
+ .board-view .choices.binary-choices .choice .label{font-size:clamp(43px,9vw,85px)}
+}
+
+/* عرض زمن السؤال في شريط العنوان؛ لا يغطي نص السؤال */
+.board-view .clock-chip{top:6px;left:clamp(170px,17vw,310px);font-size:clamp(18px,1.7vw,28px);padding:3px 15px;box-shadow:none}
+.board-view .question:before{display:none}
 </style>
 </head>
 <body>
@@ -175,12 +197,12 @@ const FIREBASE_DATABASE_URL = 'https://food-day-alab-2026-default-rtdb.asia-sout
 const ROOM = 'worldFood2026/alabSchool';
 const READY_MS = 6000, QUESTION_MS = 20000;
 const Q = [
- {q:'عصير طبيعي 100% دون سكر مضاف… أي عبارة عنه أدق؟',a:['خالٍ تمامًا من السكريات','يمكن شربه بلا حدود','قد يحتوي على سكريات حرة','يعادل دائمًا الفاكهة الكاملة'],ok:2,title:'العصير الطبيعي ليس بلا سكر!',fact:'حتى العصير الطبيعي يحتوي على سكريات حرة، والفاكهة الكاملة عادةً أغنى بالألياف وأكثر إشباعًا.'},
- {q:'كُتب على المنتج «خالٍ من الكوليسترول»… ماذا نفهم؟',a:['أنه خالٍ من جميع الدهون','أنه قليل السعرات حتمًا','أنه غني بالبروتين دائمًا','قد يحتوي على دهون رغم ذلك'],ok:3,title:'خلو الكوليسترول لا يعني خلو الدهون!',fact:'الزيوت النباتية غالبًا خالية من الكوليسترول، لكنها تحتوي على دهون تمنح نحو 9 سعرات حرارية لكل غرام.'},
- {q:'كيف نعرف أن الخبز البني مصنوع من الحبوب الكاملة؟',a:['نقرأ قائمة المكونات','من اللون الداكن فقط','من ارتفاع سعره','من طراوة ملمسه'],ok:0,title:'اللون البني ليس دليلًا!',fact:'قد يكون الخبز بنيًا دون أن يكون كامل الحبوب؛ ابحثي عن القمح الكامل في قائمة المكونات.'},
- {q:'ما الذي يساعد على امتصاص الحديد النباتي في العدس؟',a:['شرب القهوة مع الوجبة','إضافة عصير الليمون','شرب الشاي مع الوجبة','زيادة الملح في الطعام'],ok:1,title:'الليمون صديق الحديد النباتي!',fact:'فيتامين C في الليمون يساعد الجسم على امتصاص الحديد النباتي، بينما قد يقلّل الشاي والقهوة امتصاصه مع الوجبة.'},
- {q:'عبوة فيها 3 حصص، وكل حصة 120 سعرة… كم مجموع سعراتها؟',a:['120 سعرة حرارية','240 سعرة حرارية','300 سعرة حرارية','360 سعرة حرارية'],ok:3,title:'انتبهي إلى عدد الحصص!',fact:'الحساب: 3 × 120 = 360 سعرة حرارية. قد تُظهر البطاقة الغذائية سعرات الحصة الواحدة، لا العبوة كلها.'},
- {q:'هل زيادة كمية الفيتامينات تعني دائمًا فائدة أكبر؟',a:['نعم، مهما كانت الجرعة','نعم، إن كانت طبيعية','لا، قد تضر الجرعات المفرطة','نعم، لأنها لا تتراكم'],ok:2,title:'زيادة الفيتامينات ليست دائمًا أفضل!',fact:'الإفراط في بعض المكملات، ومنها فيتامين D، قد يسبب ضررًا؛ المهم تلبية احتياجات الجسم لا الإفراط.'}
+ {q:'اشترت هدى عصيرًا «دون سكر مضاف». قد يحتوي على سكريات حرة. صح أم خطأ؟',a:['صح','خطأ'],ok:0,title:'العصير الطبيعي قد يحتوي على سكريات حرة',fact:'حتى العصير الطبيعي من دون سكر مضاف يحتوي على سكريات حرة؛ الفاكهة الكاملة عادةً أغنى بالألياف وأكثر إشباعًا.'},
+ {q:'كُتب على المنتج «خالٍ من الكوليسترول»… ماذا نفهم؟',a:['أنه يمكن تناوله بأي كمية','أنه لا يحتوي على أي دهون','أنه قد يحتوي على دهون وسعرات مرتفعة','أنه بالضرورة قليل السعرات'],ok:2,title:'خالٍ من الكوليسترول لا يعني خاليًا من الدهون',fact:'الزيوت النباتية لا تحتوي بطبيعتها على الكوليسترول، لكنها غنية بالدهون والسعرات الحرارية.'},
+ {q:'كيف نعرف أن الخبز البني مصنوع من الحبوب الكاملة؟',a:['نتأكد من وجود «قمح كامل» في المكونات','نختاره لأن لونه داكن','نعتمد على كلمة «صحي» في الإعلان','نختاره إذا كان سعره أعلى'],ok:0,title:'اقرئي قائمة المكونات، لا لون الخبز',fact:'اللون الداكن وحده لا يثبت أن الخبز مصنوع من الحبوب الكاملة. تحققي من قائمة المكونات.'},
+ {q:'ما الذي يساعد على امتصاص الحديد النباتي في العدس؟',a:['شرب الشاي مباشرة مع الوجبة','إضافة الليمون إلى طبق العدس','شرب القهوة مع الطعام','الاكتفاء بإضافة الملح'],ok:1,title:'فيتامين C يساعد على امتصاص الحديد النباتي',fact:'يساعد فيتامين C الموجود في الليمون على امتصاص الحديد النباتي، بينما قد يقلل الشاي والقهوة امتصاصه عند تناولهما مع الوجبة.'},
+ {q:'🍔 وجبة مطعم: شطيرة 340 سعرة + بطاطس 220 + ماء 0. كم مجموع السعرات؟',a:['340 سعرة حرارية','460 سعرة حرارية','560 سعرة حرارية','660 سعرة حرارية'],ok:2,title:'احسبي سعرات الوجبة كاملة',fact:'المجموع 340 + 220 + 0 = 560 سعرة حرارية. هذه أرقام افتراضية للتدريب؛ تختلف السعرات الفعلية من مطعم لآخر.'},
+ {q:'تقول نور: «جرعات الفيتامينات الكبيرة آمنة للجميع». صح أم خطأ؟',a:['صح','خطأ'],ok:1,title:'الإفراط في الفيتامينات قد يضر',fact:'قد تسبب الجرعات المفرطة من بعض المكملات، ومنها فيتامين D، أضرارًا صحية؛ الجرعة المناسبة مهمة.'}
 ];
 const COLOR=['berry','carrot','lemon','kiwi'], ICON=['🍓','🥕','🍋','🥝'], ABC=['A','B','C','D'];
 const $=s=>document.querySelector(s), ESC=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -228,8 +250,8 @@ async function sync(){if(!REMOTE||readBusy)return;readBusy=true;try{let r=await 
 function urlFor(v){let u=new URL(location.href);u.searchParams.set('view',v);return u.href}
 function setView(v){if(v==='host')v='screen';view=v;let u=new URL(location.href);u.searchParams.set('view',v);history.replaceState(null,'',u);render(true)}
 const frame=(label,tag,body)=>`<header><div class="brand">🌍 اليوم العالمي للغذاء · ${label}</div><span class="tag">${tag}</span></header><main class="main">${body}</main><div class="status">${REMOTE?'اتصال بين الأجهزة بعد إعداد قاعدة البيانات':'وضع تجريبي داخل المتصفح نفسه'} ${ESC(lastStatus)}</div>`;
-function choices(i,interactive=false){return `<div class="choices">${Q[i].a.map((o,n)=>`<button class="choice ${COLOR[n]}" ${interactive?`data-action="answer" data-choice="${n}"`:'disabled'}><span class="abc">${ABC[n]}</span><span class="label">${ESC(o)}</span><span class="food">${ICON[n]}</span></button>`).join('')}</div>`}
-function questionBody(i,interactive=false){return `<div class="quiz"><div class="question"><h2 class="question-text">${ESC(Q[i].q)}</h2></div>${choices(i,interactive)}</div><div class="clock-chip" id="clockNum">20 ث</div><div class="border-timer" aria-hidden="true"><svg id="timerSvg"><path id="timerPath"/></svg></div>`}
+function choices(i,interactive=false){const binary=Q[i].a.length===2;return `<div class="choices${binary?' binary-choices':''}">${Q[i].a.map((o,n)=>`<button class="choice ${COLOR[n]}" ${interactive?`data-action="answer" data-choice="${n}"`:'disabled'}><span class="abc">${binary?(n===0?'✓':'✕'):ABC[n]}</span><span class="label">${ESC(o)}</span><span class="food">${binary?'':ICON[n]}</span></button>`).join('')}</div>`}
+function questionBody(i,interactive=false){return `<div class="quiz"><div class="question"><h2 class="question-text">${ESC(Q[i].q)}</h2></div>${choices(i,interactive)}</div>${interactive?'':`<div class="clock-chip" id="clockNum">20 ث</div><div class="border-timer" aria-hidden="true"><svg id="timerSvg"><path id="timerPath"/></svg></div>`}`}
 const registered=()=>`<div class="classes">${classList().length?classList().map(c=>`<span class="class-pill">🌿 ${ESC(c.name)}</span>`).join(''):'<span class="class-pill">بانتظار دخول المشاركات…</span>'}</div>`;
 function lobby(){return `<div class="center"><div class="hero-icons"><span>🥦</span><span>🍎</span><span>🥕</span><span>🌽</span><span>🍋</span></div><h1>المشاركات <b>المسجّلات</b></h1><p class="intro">عدد المشاركات المسجلات: ${classList().length}</p>${registered()}<p class="muted">بعد دخول المشاركات تبدأ مرحلة الاستعداد 6 ثوانٍ، ثم السؤال الأول لمدة 20 ثانية.</p></div>`}
 function ready(){return `<div class="center"><div class="hero-icons"><span>🍓</span><span>🥕</span><span>🥦</span></div><h1 class="ready-dramatic">مستعديييييين؟!</h1><div class="ready-number" id="readyNum">${remaining('ready')}</div><p class="ready-sub">السؤال ${index()+1} يبدأ بعد العدّ التنازلي</p></div>`}
@@ -269,15 +291,15 @@ function teacher(){
  }
  const label=ESC(cls.name);
  if(s==='lobby')return frame('جوال المشاركة',label,`<div class="center"><div class="hero-icons"><span>🌱</span><span>🥕</span><span>🍎</span></div><h1>تم تسجيل المشاركة ✓</h1><p class="intro">${label}</p><p class="muted">في انتظار شاشة الاستعداد والسؤال الأول</p></div>`);
- if(s==='ready')return frame('جوال المشاركة',label,ready());
+ if(s==='ready')return frame('جوال المشاركة',label,`<div class="center"><h1>🌿 استعدّي للسؤال التالي</h1></div>`);
  if(s==='question'){
    const a=validAnswer(index(),me);
-   if(a)return frame('جوال المشاركة',label,`<div class="center"><div class="hero-icons"><span>✅</span><span>🌾</span></div><h1>وصلت الإجابة!</h1><p class="intro">تم اعتماد الاختيار ${ABC[a.choice]} · ${(elapsed(index(),a)/1000).toFixed(2)} ثانية</p><p class="muted">تظهر الإجابة الصحيحة بعد انتهاء وقت السؤال</p><div class="clock-chip" id="clockNum">20 ث</div><div class="border-timer"><svg id="timerSvg"><path id="timerPath"/></svg></div></div>`);
+   if(a){const ok=a.choice===Q[index()].ok;return frame('نتيجة الإجابة',label,`<div class="center"><h1 class="phone-feedback ${ok?'right':'wrong'}">${ok?'✅ إجابة صحيحة':'❌ إجابة خاطئة'}</h1></div>`)}
    return frame('جوال المشاركة',`السؤال ${index()+1} / ${Q.length}`,questionBody(index(),true));
  }
  if(s==='reveal'){
    const a=validAnswer(index(),me),ok=a?.choice===Q[index()].ok;
-   return frame('نتيجة السؤال',label,`<div class="center"><div class="hero-icons"><span>${ok?'🏆':'💡'}</span><span>🍋</span></div><h1>${ok?'إجابة صحيحة!':a?'تعلمنا شيئًا جديدًا':'انتهى وقت الإجابة'}</h1><p class="intro">${ESC(Q[index()].q)}</p><p class="intro">الإجابة: ${ESC(Q[index()].a[Q[index()].ok])}</p><p class="muted">${ESC(Q[index()].fact)}</p></div>`);
+   return frame('نتيجة الإجابة',label,`<div class="center"><h1 class="phone-feedback ${a?(ok?'right':'wrong'):'waiting'}">${a?(ok?'✅ إجابة صحيحة':'❌ إجابة خاطئة'):'لم تُسجَّل إجابة'}</h1></div>`);
  }
  const rows=totals(), my=rows.find(x=>x.id===me);
  const rank=rows.findIndex(x=>x.id===me)+1;
