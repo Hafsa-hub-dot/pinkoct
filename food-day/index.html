@@ -61,7 +61,7 @@ h1{margin:0;font-size:clamp(37px,5.8vw,95px);line-height:1.2;color:var(--pine)}h
 @media(max-width:760px),(max-aspect-ratio:3/4){.screen-tools{flex-wrap:wrap;padding:6px;min-height:0}.screen-tools .control-main{min-width:140px}.screen-tools .btn,.tool-icon{font-size:13px;padding:7px 10px;min-height:30px}.tool-info{display:none}.ready-dramatic{font-size:clamp(47px,10vw,82px)}.ready-number{font-size:clamp(90px,17vh,140px)}.music-modal{gap:10px}}
 @media(max-height:650px){.screen-tools{min-height:43px;padding:3px 7px}.screen-tools .btn,.tool-icon{padding:5px 10px;min-height:30px}.ready-dramatic{font-size:clamp(62px,12vh,104px)}}
 
-/* كشف الإجابة، أسرع الإجابات الصحيحة، وتتويج تراكمي في شرائح مستقلة */
+/* كشف إجابة السؤال وأسرع المشاركات دون إظهار الترتيب التراكمي إلا في النهاية */
 .role-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .role-option{border:2px solid #c6dfca;border-radius:15px;background:#fff;color:#1e6345;padding:9px 7px;font-weight:700;font-size:clamp(15px,1.35vw,21px)}
 .role-option.chosen{border-color:#18a875;background:#e0f7e9;box-shadow:inset 0 0 0 2px #67c89b}
@@ -109,6 +109,61 @@ h1{margin:0;font-size:clamp(37px,5.8vw,95px);line-height:1.2;color:var(--pine)}h
 }
 @media(max-height:650px){.reveal-question{font-size:clamp(23px,5vh,42px);max-height:20vh}.reveal-answer strong{font-size:clamp(23px,6vh,46px)}.round-podium-heading h1{font-size:clamp(27px,6vh,46px)}.round-podium{max-height:43vh}.round-medal{font-size:clamp(30px,7vh,54px)}}
 
+/* عرض السبورة: استغلال كامل مساحة جهاز العرض بنسبة 16:9 أو أبعاد أخرى */
+#app{padding:0}
+.view.board-view{
+  width:100%;max-width:none;height:100%;margin:0;border:0;border-radius:0;
+  box-shadow:none;padding:clamp(7px,1vmin,15px);
+  gap:clamp(6px,1vh,14px);
+}
+.board-view .main{width:100%;min-height:0;gap:clamp(7px,1vh,14px)}
+.board-view header{min-height:32px}
+.board-view .brand{font-size:clamp(16px,1.8vw,29px)}
+.board-view .tag{font-size:clamp(13px,1.35vw,23px)}
+.board-view .status{display:none}
+.board-view .quiz{grid-template-rows:minmax(0,32%) minmax(0,1fr);gap:clamp(9px,1.35vh,18px)}
+.board-view .question{max-height:none;padding:clamp(13px,2vh,28px) 3%}
+.board-view .question-text{font-size:clamp(45px,5vw,106px);max-width:96%}
+.board-view .choices{gap:clamp(9px,1.4vmin,19px)}
+.board-view .choice{padding:clamp(10px,2vh,27px)}
+.board-view .choice .label{font-size:clamp(39px,3.95vw,86px)}
+.board-view .choice .abc{width:clamp(54px,5vw,93px);height:clamp(54px,5vw,93px);font-size:clamp(25px,2.5vw,45px)}
+.board-view .choice .food{font-size:clamp(32px,3.15vw,64px)}
+.board-view .classes{max-width:100%;gap:clamp(10px,1.3vw,22px)}
+.board-view .class-pill{font-size:clamp(22px,2vw,40px)}
+.board-view .center{gap:clamp(9px,1.6vh,22px)}
+.board-view .reveal-stage{gap:clamp(6px,1.2vh,15px)}
+.board-view .reveal-question{max-height:23vh;font-size:clamp(43px,4.65vw,90px)}
+.board-view .reveal-answer strong{font-size:clamp(37px,4.1vw,80px)}
+.board-view .fast-name{font-size:clamp(19px,2.2vw,42px)}
+.board-view .fast-time{font-size:clamp(16px,1.7vw,31px)}
+.board-view .podium{width:96%;flex-basis:43%}
+.board-view .final-list{width:96%;max-width:none}
+.board-view .final-title{font-size:clamp(43px,5vw,91px)}
+.board-view .screen-tools{min-height:clamp(47px,7.7vh,82px);width:100%;gap:clamp(8px,1.3vw,23px)}
+.board-view .screen-tools .control-main{font-size:clamp(20px,2vw,35px);min-width:clamp(240px,26vw,490px)}
+.board-view .screen-tools .reset-all{background:#fff0ee;color:#962d3c;border:2px solid #e4a4a5;font-size:clamp(16px,1.25vw,24px)}
+.board-view .screen-tools .reset-all:hover{background:#ffe0dc}
+@media(max-width:760px),(max-aspect-ratio:3/4){
+ .board-view .quiz{grid-template-rows:minmax(0,24%) minmax(0,1fr)}
+ .board-view .question-text{font-size:clamp(30px,8.1vw,53px)}
+ .board-view .choice .label{font-size:clamp(26px,7vw,48px)}
+ .board-view .choice .abc{width:clamp(36px,10vw,52px);height:clamp(36px,10vw,52px);font-size:20px}
+ .board-view .choice{padding:6px 10px}
+ .board-view .reveal-question{font-size:clamp(27px,6vw,45px)}
+ .board-view .reveal-answer strong{font-size:clamp(25px,6vw,48px)}
+ .board-view .fast-name{font-size:clamp(12px,3.1vw,21px)}
+ .board-view .fast-time{font-size:clamp(11px,2.8vw,16px)}
+ .board-view .screen-tools .control-main{font-size:16px;min-width:180px}
+ .board-view .screen-tools .reset-all{font-size:13px}
+}
+@media(max-height:650px) and (min-width:761px){
+ .board-view .question-text{font-size:clamp(35px,5.4vh,63px)}
+ .board-view .choice .label{font-size:clamp(31px,5.1vh,60px)}
+ .board-view .quiz{grid-template-rows:minmax(0,30%) minmax(0,1fr)}
+ .board-view .reveal-question{font-size:clamp(32px,5.9vh,56px)}
+}
+
 </style>
 </head>
 <body>
@@ -131,17 +186,23 @@ const COLOR=['berry','carrot','lemon','kiwi'], ICON=['🍓','🥕','🍋','🥝'
 const $=s=>document.querySelector(s), ESC=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const DB=FIREBASE_DATABASE_URL.trim().replace(/\/+$/,'');
 const REMOTE=/^https:\/\/[^/]+\.(?:firebaseio\.com|firebasedatabase\.app)$/i.test(DB);
-const KEY='foodDayV6Shared', CLASSKEY='foodDayV6Class';
-const empty=()=>({live:{phase:'lobby',index:-1},classes:{},rounds:{},answers:{}});
+const KEY='foodDayV6Shared', CLASSKEY='foodDayV6Class', SESSIONKEY='foodDayV7CurrentSession';
+const empty=()=>({live:{phase:'lobby',index:-1},classes:{},rounds:{},answers:{},sessionKey:'legacy'});
 let state=empty(),me=sessionStorage.getItem(CLASSKEY)||'',draft='',view=new URLSearchParams(location.search).get('view')||'welcome',busy=false,renderKey='',readBusy=false,lastStatus='',joinType='class';
 const classId=name=>'c'+Array.from(new TextEncoder().encode(name.toLowerCase())).map(n=>n.toString(16).padStart(2,'0')).join('');
 const normalizeName=s=>String(s||'').trim().replace(/\s+/g,' ').slice(0,40);
 const classList=()=>Object.entries(state.classes||{}).map(([id,c])=>({id,name:c.name})).sort((a,b)=>a.name.localeCompare(b.name,'ar'));
+function syncParticipantSession(){
+ const token=String(state.sessionKey||'legacy');
+ const old=sessionStorage.getItem(SESSIONKEY);
+ if(old===null){if(token!=='legacy'&&me){me='';sessionStorage.removeItem(CLASSKEY);renderKey='';}sessionStorage.setItem(SESSIONKEY,token);return;}
+ if(old!==token){me='';draft='';sessionStorage.removeItem(CLASSKEY);sessionStorage.setItem(SESSIONKEY,token);renderKey='';}
+}
 const serverStamp=()=>REMOTE?{'.sv':'timestamp'}:Date.now();
 const stage=()=>{
  const l=state.live||empty().live;
  if(l.phase==='final')return 'final';
- if(l.phase==='podium')return 'podium';
+ if(l.phase==='podium')return 'reveal'; // توافق مع الجولات القديمة دون إظهار الترتيب التراكمي
  if(l.phase==='lobby'||l.index<0)return 'lobby';
  const start=Number(state.rounds?.[l.index]?.startedAt);
  if(!start)return 'lobby';
@@ -163,7 +224,7 @@ function localRead(){try{return JSON.parse(localStorage.getItem(KEY))||empty()}c
 function localSet(path,value,unique){let d=localRead(),ks=path.split('/'),ref=d;for(let i=0;i<ks.length-1;i++)ref=ref[ks[i]]||(ref[ks[i]]={});let k=ks.at(-1);if(unique&&ref[k]!==undefined)throw Error('سُجّلت إجابة الصف بالفعل');if(value===null)delete ref[k];else ref[k]=value;localStorage.setItem(KEY,JSON.stringify(d));state=d;return value}
 async function write(path,value,unique=false){if(!REMOTE){let v=localSet(path,value,unique);render();return v}let headers={'Content-Type':'application/json'};if(unique)headers['if-match']='null_etag';let r=await fetch(dbURL(path),{method:'PUT',headers,body:JSON.stringify(value)});if(r.status===412)throw Error('سُجّلت إجابة هذا الصف مسبقًا');if(!r.ok)throw Error('فشل الحفظ: '+r.status);let v=await r.json();await sync();return v}
 async function updateRoot(obj){if(REMOTE){let r=await fetch(dbURL(),{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(obj)});if(!r.ok)throw Error('فشل التصفير');await sync()}else{let d=localRead();Object.assign(d,obj);localStorage.setItem(KEY,JSON.stringify(d));state=d;render()}}
-async function sync(){if(!REMOTE||readBusy)return;readBusy=true;try{let r=await fetch(dbURL()+'?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);let next=await r.json()||empty();if(JSON.stringify(next)!==JSON.stringify(state)){state=next;render()}lastStatus='🟢 متصل بقاعدة البيانات'}catch(e){lastStatus='🔴 مشكلة الاتصال: '+e.message}finally{readBusy=false}}
+async function sync(){if(!REMOTE||readBusy)return;readBusy=true;try{let r=await fetch(dbURL()+'?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);let next=await r.json()||empty();if(JSON.stringify(next)!==JSON.stringify(state)){state=next;syncParticipantSession();render()}else{syncParticipantSession()}lastStatus='🟢 متصل بقاعدة البيانات'}catch(e){lastStatus='🔴 مشكلة الاتصال: '+e.message}finally{readBusy=false}}
 function urlFor(v){let u=new URL(location.href);u.searchParams.set('view',v);return u.href}
 function setView(v){if(v==='host')v='screen';view=v;let u=new URL(location.href);u.searchParams.set('view',v);history.replaceState(null,'',u);render(true)}
 const frame=(label,tag,body)=>`<header><div class="brand">🌍 اليوم العالمي للغذاء · ${label}</div><span class="tag">${tag}</span></header><main class="main">${body}</main><div class="status">${REMOTE?'اتصال بين الأجهزة بعد إعداد قاعدة البيانات':'وضع تجريبي داخل المتصفح نفسه'} ${ESC(lastStatus)}</div>`;
@@ -194,11 +255,6 @@ function revealSlide(){
    <div class="reveal-fact">💡 ${ESC(q.fact)}</div>
  </section>`;
 }
-function podiumSlide(){
- const rows=totals(),n=completed(),ranked=rows.filter(r=>r.points>0),first=ranked[0],second=ranked[1],third=ranked[2];
- const card=(r,p,k)=>`<div class="round-podium-card ${k}"><div class="round-medal">${mark(p)}</div><div class="round-name">${r?ESC(r.name):'—'}</div><div class="round-points">${r?r.points:0}<small> / ${n}</small></div><div class="round-pct">${r?r.pct:0}%</div></div>`;
- return `<div class="round-podium-stage"><div class="round-podium-heading"><span>🌟 حصاد التحدّي 🌟</span><h1>🏆 منصة التتويج التراكمي</h1><p>بعد ${n} من ${Q.length} أسئلة · الأكثر صحة ثم الأسرع</p></div><div class="round-podium">${card(second,2,'second')}${card(first,1,'first')}${card(third,3,'third')}</div><div class="rest-ranking">${rows.slice(3).map((r,j)=>`<div class="rest-chip">${j+4} · ${ESC(r.name)} <b>${r.points} نقاط</b></div>`).join('')||'<div class="rest-chip">👏 شكرًا لجميع المشاركات</div>'}</div></div>`;
-}
 function finale(){let rows=totals(),c=n=>rows[n]||null,podium=(n,kind)=>`<div class="podium-card ${kind}"><div class="emoji">${mark(n+1)}</div><div class="class">${c(n)?ESC(c(n).name):'—'}</div><div class="pts">${c(n)?c(n).points:'0'} / ${Q.length}</div><div>${c(n)?c(n).pct+'%':''}</div></div>`;return `<div class="center" style="gap:8px;justify-content:center"><h1 class="final-title">🏆 أبطال الغذاء الذكي 🏆</h1><p class="muted">الترتيب النهائي: الأكثر إجابات صحيحة ثم الأقل زمنًا للإجابات الصحيحة</p><div class="podium">${podium(1,'second')}${podium(0,'first')}${podium(2,'third')}</div><section class="panel final-list"><h2>✨ القائمة النهائية لجميع الصفوف</h2>${rankingList(rows)}</section></div>`}
 function teacher(){
  const cls=state.classes?.[me], s=stage();
@@ -225,11 +281,10 @@ function teacher(){
  }
  const rows=totals(), my=rows.find(x=>x.id===me);
  const rank=rows.findIndex(x=>x.id===me)+1;
- if(s==='podium')return frame('التتويج التراكمي',label,`<div class="center"><div class="hero-icons"><span>🏆</span><span>🌟</span></div><h1>ترتيبكِ التراكمي</h1><p class="intro">${label}</p><p class="intro">المركز ${rank||'—'} · ${my?.points||0} من ${completed()} · ${my?.pct||0}%</p><p class="muted">استعدّي للسؤال القادم بعد بدء العد التنازلي</p></div>`);
  return frame('النتائج النهائية',label,`<div class="center"><div class="hero-icons"><span>🏆</span><span>🥦</span><span>🍎</span></div><h1>انتهى تحدّي الغذاء الذكي!</h1><p class="intro">${label}</p><p class="intro">المركز ${rank||'—'} · ${my?.points||0} / ${Q.length} نقاط · ${my?.pct||0}%</p><p class="muted">شكرًا لمشاركتكنّ في اليوم العالمي للغذاء</p></div>`);
 }
 
-function welcome(){return frame('مدرسة العب الثانوية للبنات','قسم الفيزياء · 2026/2027',`<div class="center"><div class="hero-icons"><span>🍓</span><span>🥕</span><span>🍋</span><span>🥦</span><span>🥑</span></div><h1>تحدّي <b>الغذاء الذكي</b></h1><p class="intro">المشاركات يدخلن ← استعداد 6 ث ← سؤال 20 ث ← الإجابة والأسرع ← تتويج تراكمي</p><div class="row"><button class="btn" data-action="view" data-to="teacher">📱 دخول المعلمة</button><button class="btn gold" data-action="view" data-to="screen">🖥️ شاشة السبورة</button></div><p class="muted">${REMOTE?'🌐 الربط عبر Firebase':'🧪 تجربة محلية: الربط بين الأجهزة يتطلب رابط Firebase'}</p></div>`)}
+function welcome(){return frame('مدرسة العب الثانوية للبنات','قسم الفيزياء · 2026/2027',`<div class="center"><div class="hero-icons"><span>🍓</span><span>🥕</span><span>🍋</span><span>🥦</span><span>🥑</span></div><h1>تحدّي <b>الغذاء الذكي</b></h1><p class="intro">المشاركات يدخلن ← استعداد 6 ث ← سؤال 20 ث ← الإجابة والأسرع ← السؤال التالي ← التتويج النهائي</p><div class="row"><button class="btn" data-action="view" data-to="teacher">📱 دخول المعلمة</button><button class="btn gold" data-action="view" data-to="screen">🖥️ شاشة السبورة</button></div><p class="muted">${REMOTE?'🌐 الربط عبر Firebase':'🧪 تجربة محلية: الربط بين الأجهزة يتطلب رابط Firebase'}</p></div>`)}
 
 /* 🎵 موسيقى MP3 مستخرجة من الفيديو المرفق ومضمنة محليًا داخل هذا الملف.
    لا يعتمد تشغيلها على YouTube أو أي خدمة صوت خارجية.
@@ -3022,28 +3077,29 @@ function settingsModal(){
 
 function boardTools(s){
  if(s==='ready'||s==='question')return '';
- const inLobby=s==='lobby',inReveal=s==='reveal',inPodium=s==='podium',last=index()===Q.length-1;
+ const inLobby=s==='lobby',inReveal=s==='reveal',last=index()===Q.length-1;
  const button=inLobby?'<button class="btn control-main" data-action="next">🚀 ابدئي السؤال الأول</button>'
-    :inReveal?'<button class="btn gold control-main" data-action="podium">🏆 شريحة التتويج التراكمي</button>'
-    :inPodium?(last?'<button class="btn gold control-main" data-action="final">🏆 عرض النتائج النهائية</button>':`<button class="btn control-main" data-action="next">🚀 ابدئي السؤال ${index()+2}</button>`)
-    :s==='final'?'<button class="btn gold" data-action="reset">↺ جولة جديدة</button>':'';
- return `<div class="screen-tools"><span class="tool-info">🎛️ السبورة والتحكّم في شاشة واحدة</span>${button}<button class="tool-icon" data-action="settings">🎵 ${musicEnabled?'الصوت جاهز ✓':'الموسيقى متوقفة'}</button><button class="tool-icon" data-action="fullscreen">⛶ ملء الشاشة</button><button class="tool-icon" data-action="reset" title="تصفير نتائج الجولة">↻</button></div>`;
+   :inReveal?(last?'<button class="btn gold control-main" data-action="final">🏆 التتويج النهائي</button>':`<button class="btn control-main" data-action="next">🚀 استعداد السؤال ${index()+2}</button>`)
+   :s==='final'?'<button class="btn gold control-main" data-action="reset">🆕 مسابقة جديدة</button>':'';
+ return `<div class="screen-tools">${button}<button class="tool-icon" data-action="settings">🎵 ${musicEnabled?'الصوت جاهز ✓':'الموسيقى متوقفة'}</button><button class="tool-icon" data-action="fullscreen">⛶ الشاشة كاملة</button><button class="tool-icon reset-all" data-action="reset" title="حذف أسماء المشاركات وإجاباتهن وبدء مسابقة جديدة">🗑️ تصفير المشاركات</button></div>`;
 }
 function screen(){
  const s=stage();
- const tag=s==='lobby'?'المشاركات المسجّلات':s==='ready'?'الاستعداد':s==='question'?`سؤال ${index()+1} / ${Q.length}`:s==='reveal'?`كشف الإجابة ${index()+1}`:s==='podium'?'التتويج التراكمي':'التتويج النهائي';
- const body=s==='lobby'?lobby():s==='ready'?ready():s==='question'?questionBody(index()):s==='reveal'?revealSlide():s==='podium'?podiumSlide():finale();
+ const tag=s==='lobby'?'المشاركات المسجّلات':s==='ready'?'الاستعداد':s==='question'?`سؤال ${index()+1} / ${Q.length}`:s==='reveal'?`كشف الإجابة ${index()+1}`:'التتويج النهائي';
+ const body=s==='lobby'?lobby():s==='ready'?ready():s==='question'?questionBody(index()):s==='reveal'?revealSlide():finale();
  return frame('شاشة السبورة',tag,boardTools(s)+body+(musicOpen?settingsModal():''));
 }
 function render(force=false){
- const s=stage(), dynamic=(s==='lobby'||s==='reveal'||s==='podium'||s==='final');
+ const s=stage(), dynamic=(s==='lobby'||s==='reveal'||s==='final');
  const key=[view,s,index(),joinType,musicOpen,musicEnabled,musicVolume,
     view==='teacher'?me+'|'+Boolean(validAnswer(index(),me))+'|'+Boolean(state.classes?.[me]):'',
     dynamic?JSON.stringify([state.classes,state.answers]):''
  ].join('|');
  if(!force&&key===renderKey)return;
  renderKey=key;
- $('#view').innerHTML=view==='teacher'?teacher():view==='screen'?screen():welcome();
+ const root=$('#view');
+ root.classList.toggle('board-view',view==='screen');
+ root.innerHTML=view==='teacher'?teacher():view==='screen'?screen():welcome();
  requestAnimationFrame(()=>{fit();drawClock()});
 }
 function fit(){document.querySelectorAll('.question-text,.choice .label').forEach(el=>{el.style.fontSize='';let p=el.closest('.question,.choice');let fs=parseFloat(getComputedStyle(el).fontSize);while(fs>23&&(el.scrollHeight>p.clientHeight-14||el.scrollWidth>p.clientWidth-28)){fs--;el.style.fontSize=fs+'px'}})}
@@ -3066,7 +3122,7 @@ async function join(e){
  busy=true;
  try{
    if(!state.classes?.[id])await write('classes/'+id,{name,role});
-   me=id;sessionStorage.setItem(CLASSKEY,id);draft='';render(true);
+   me=id;sessionStorage.setItem(CLASSKEY,id);sessionStorage.setItem(SESSIONKEY,String(state.sessionKey||'legacy'));draft='';render(true);
  }catch(err){alert('لم ينجح التسجيل: '+err.message)}
  finally{busy=false}
 }
@@ -3074,7 +3130,7 @@ async function answer(n){if(busy||stage()!=='question'||!me||validAnswer(index()
 async function nextRound(){
  if(busy)return;
  const s=stage(),i=s==='lobby'?0:index()+1;
- if(!(s==='lobby'||s==='podium')||i>=Q.length)return;
+ if(!(s==='lobby'||s==='reveal')||i>=Q.length)return;
  armMusic(i);busy=true;
  try{
    await write('rounds/'+i,{startedAt:serverStamp()});
@@ -3082,14 +3138,25 @@ async function nextRound(){
    render(true);
  }catch(err){alert('تعذر بدء السؤال: '+err.message)}finally{busy=false}
 }
-async function openPodium(){
- if(busy||stage()!=='reveal')return;
+async function final(){
+ if(busy||stage()!=='reveal'||index()!==Q.length-1)return;
  busy=true;
- try{await write('live',{phase:'podium',index:index()});render(true)}
- catch(err){alert('تعذر عرض التتويج: '+err.message)}finally{busy=false}
+ try{await write('live',{phase:'final',index:Q.length-1});render(true)}
+ catch(err){alert('تعذّر عرض التتويج النهائي: '+err.message)}
+ finally{busy=false}
 }
-async function final(){if(busy||stage()!=='podium'||index()!==Q.length-1)return;busy=true;try{await write('live',{phase:'final',index:Q.length-1});render(true)}catch(err){alert(err.message)}finally{busy=false}}
-async function reset(){if(!confirm('هل تريدين تصفير النقاط وإعادة المسابقة مع إبقاء الصفوف المسجلة؟'))return;busy=true;try{await updateRoot({live:{phase:'lobby',index:-1},rounds:null,answers:null});render(true)}catch(err){alert('تعذّر التصفير: '+err.message)}finally{busy=false}}
+async function reset(){
+ if(busy)return;
+ if(!confirm('سيتم حذف جميع المشاركات المسجلات وكل الإجابات والنتائج، والعودة إلى شاشة البداية.\nستحتاج كل مشاركة إلى إدخال اسمها من جديد.\nهل تريدين متابعة تصفير المشاركات؟'))return;
+ busy=true;
+ stopMusic();
+ try{
+  const sessionKey='s'+Date.now()+'_'+Math.random().toString(36).slice(2,10);
+  await updateRoot({live:{phase:'lobby',index:-1},classes:null,rounds:null,answers:null,sessionKey});
+  me=''; draft=''; sessionStorage.removeItem(CLASSKEY);sessionStorage.setItem(SESSIONKEY,sessionKey);
+  render(true);
+ }catch(err){alert('تعذّر تصفير المشاركات: '+err.message)}finally{busy=false}
+}
 document.addEventListener('submit',e=>{if(e.target.id==='joinForm')join(e)});
 document.addEventListener('input',e=>{
  if(e.target.id==='classInput')draft=e.target.value;
@@ -3119,7 +3186,6 @@ document.addEventListener('click',e=>{
   render(true);
  }
  else if(action==='next')nextRound();
- else if(action==='podium')openPodium();
  else if(action==='final')final();
  else if(action==='reset')reset();
  else if(action==='fullscreen'){
@@ -3135,7 +3201,7 @@ document.addEventListener('click',e=>{
 
 let lastStage='';setInterval(()=>{let s=stage();tickMusic();if(s!==lastStage){lastStage=s;render(true)}if(s==='ready'){let el=$('#readyNum');if(el)el.textContent=remaining('ready')}if(s==='question')drawClock();if(view==='host'&&(s==='ready'||s==='question')){let el=$('.pill-text');if(el)el.textContent=s==='ready'?'استعداد '+remaining('ready')+' ث':'متبقّي '+remaining('question')+' ث'}},90);
 window.addEventListener('resize',()=>{requestAnimationFrame(()=>{fit();drawClock()})});document.fonts?.ready.then(()=>requestAnimationFrame(fit));
-if(REMOTE){sync();setInterval(sync,1000)}else{state=localRead();window.addEventListener('storage',e=>{if(e.key===KEY){state=localRead();render()}})}
+if(REMOTE){sync();setInterval(sync,1000)}else{state=localRead();syncParticipantSession();window.addEventListener('storage',e=>{if(e.key===KEY){state=localRead();syncParticipantSession();render()}})}
 if(view==='host')view='screen';if(!['welcome','teacher','screen'].includes(view))view='welcome';render(true);
 </script>
 </body>
