@@ -186,6 +186,45 @@ h1{margin:0;font-size:clamp(37px,5.8vw,95px);line-height:1.2;color:var(--pine)}h
 /* عرض زمن السؤال في شريط العنوان؛ لا يغطي نص السؤال */
 .board-view .clock-chip{top:6px;left:clamp(170px,17vw,310px);font-size:clamp(18px,1.7vw,28px);padding:3px 15px;box-shadow:none}
 .board-view .question:before{display:none}
+
+/* بطولتان مستقلتان للصفوف والكادر المدرسي */
+.lobby-center{gap:clamp(4px,1vh,13px)}.lobby-center .hero-icons{font-size:clamp(33px,4vw,63px)}
+.lobby-center h1{font-size:clamp(32px,4.3vw,70px)}.lobby-center .intro{font-size:clamp(21px,2.2vw,36px)}
+.lobby-leagues{display:grid;grid-template-columns:1fr 1fr;gap:clamp(9px,1.6vw,24px);width:100%;flex:1;min-height:0}
+.lobby-league{border:2px solid #e4d4ca;border-radius:22px;background:#fffbfa;padding:clamp(8px,1.4vw,19px);min-width:0;display:flex;flex-direction:column;gap:clamp(6px,1vh,11px)}
+.lobby-league.staff{background:#f4faf1;border-color:#cfe2d5}.lobby-league h2{font-size:clamp(19px,2.1vw,34px);color:#883a51;margin:0;text-align:center}
+.lobby-league.staff h2{color:#24674a}.lobby-league small{display:inline-block;font-size:.56em;color:#6d7e6d;margin-inline-start:12px}
+.lobby-league .classes{align-content:flex-start;gap:clamp(6px,.8vw,12px);overflow:hidden}
+.lobby-league .class-pill{font-size:clamp(16px,1.4vw,27px);padding:clamp(5px,.7vh,10px) clamp(7px,.9vw,13px)}.lobby-league .class-pill.empty{opacity:.7}
+.dual-reveal .fast-leagues{display:grid;grid-template-columns:1fr 1fr;gap:clamp(8px,1.2vw,17px);min-height:0}
+.fast-league{border-radius:20px;background:#fffbf9;border:2px solid #e8d7db;padding:clamp(7px,1vw,14px);min-width:0;min-height:0;display:flex;flex-direction:column;gap:clamp(6px,1vh,11px)}
+.fast-league.staff{background:#f5fbf4;border-color:#d0e4d5}
+.fast-league-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.fast-league h3{margin:0;color:#85344e;font-size:clamp(18px,1.8vw,32px);white-space:nowrap}.fast-league.staff h3{color:#1c6748}
+.fast-league-head span{font-size:clamp(12px,1.12vw,20px);color:#5b7669}
+.league-fast-grid{display:grid;grid-template-columns:repeat(var(--cols,1),minmax(0,1fr));grid-template-rows:repeat(var(--rows,1),minmax(0,1fr));gap:clamp(4px,.55vw,10px);min-height:0;flex:1}
+.league-fast-grid .fast-card{padding:clamp(3px,.5vw,7px);gap:2px;border-radius:12px}.league-fast-grid .fast-rank{font-size:clamp(15px,1.9vw,32px)}
+.league-fast-grid .fast-name{font-size:clamp(16px,1.65vw,28px);line-height:1.05}.league-fast-grid .fast-time{font-size:clamp(12px,1.22vw,21px)}
+.league-fast-grid .no-winners{font-size:clamp(22px,2.2vw,38px);padding:10px;text-align:center}
+.dual-final-stage{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;gap:clamp(5px,.8vh,10px)}
+.dual-final-title{font-size:clamp(37px,4.25vw,78px);line-height:1.12}.dual-final-sub{margin:0;font-size:clamp(13px,1.23vw,22px);color:#5b7c64;text-align:center}
+.dual-finals{display:grid;grid-template-columns:1fr 1fr;gap:clamp(9px,1.3vw,20px);flex:1;width:100%;min-height:0}
+.league-final{background:linear-gradient(140deg,#fff8f4,#fffdf9);border:2px solid #ead6d8;border-radius:23px;padding:clamp(9px,1.2vw,19px);display:flex;flex-direction:column;gap:clamp(6px,1vh,13px);min-width:0;min-height:0}
+.league-final.staff{background:linear-gradient(140deg,#f3fcf4,#fffdfa);border-color:#d0e5d5}
+.league-final-head{text-align:center}.league-final-head h2{font-size:clamp(22px,2.5vw,42px);color:#87384b;margin:0}
+.league-final.staff .league-final-head h2{color:#1d6746}.league-final-head p{font-size:clamp(15px,1.5vw,23px);color:#a58235;margin:0}
+.duo-podium{display:grid;grid-template-columns:1fr 1.15fr 1fr;align-items:end;gap:clamp(4px,.6vw,10px);flex:1;min-height:0}
+.duo-podium-card{background:linear-gradient(145deg,#9eaeb2,#cad3d6);border-radius:18px 18px 9px 9px;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:clamp(2px,.6vh,8px);height:84%;min-height:0;padding:clamp(5px,.8vw,10px);box-shadow:0 8px 18px #3c4c3533}
+.duo-podium-card.first{height:100%;background:linear-gradient(145deg,#b78a23,#f2ce70)}.duo-podium-card.third{height:77%;background:linear-gradient(145deg,#a56d46,#dcab7d)}
+.duo-medal{font-size:clamp(33px,3.3vw,57px);line-height:1}.duo-podium-card strong{font-size:clamp(17px,1.75vw,33px);line-height:1.15;overflow-wrap:anywhere}
+.duo-podium-card>span:last-child{font-size:clamp(13px,1.3vw,22px)}
+.duo-rank-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start;gap:clamp(4px,.55vw,9px);min-height:0;flex:0 1 auto}
+.duo-rank-chip{display:flex;gap:7px;align-items:center;padding:clamp(4px,.65vh,8px) clamp(5px,.65vw,10px);min-width:0;border:1px solid #ead8c4;border-radius:11px;background:#fffefa;font-size:clamp(12px,1.06vw,19px)}
+.duo-rank-chip.top-three{background:#fff2d6}.staff .duo-rank-chip.top-three{background:#eaf8ed}
+.duo-rank-chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}.duo-rank-chip strong{white-space:nowrap;color:#2b8060}
+.no-final-league{grid-column:1/-1;text-align:center;font-size:clamp(17px,1.7vw,28px)}
+@media(max-width:740px){.lobby-leagues{gap:5px}.lobby-league{padding:5px;border-radius:12px}.lobby-league h2{font-size:15px}.lobby-league .class-pill{font-size:11px}.dual-finals{gap:5px}.league-final{padding:5px;border-radius:10px;gap:4px}.league-final-head h2{font-size:17px}.duo-podium-card{border-radius:9px;padding:3px}.duo-medal{font-size:25px}.duo-podium-card strong{font-size:12px}.duo-podium-card>span:last-child{font-size:10px}.duo-rank-chip{padding:2px;font-size:9px;gap:2px}.fast-league{padding:4px;border-radius:11px}.fast-league h3{font-size:13px}.fast-league-head span{font-size:10px}.league-fast-grid .fast-name{font-size:12px}}
+@media(max-height:650px){.dual-final-title{font-size:clamp(30px,5.6vh,50px)}.league-final-head h2{font-size:clamp(19px,3.5vh,28px)}.duo-podium-card strong{font-size:clamp(14px,3vh,22px)}.duo-rank-chip{font-size:clamp(10px,2.1vh,15px);padding:3px 7px}}
 </style>
 </head>
 <body>
@@ -213,7 +252,9 @@ const empty=()=>({live:{phase:'lobby',index:-1},classes:{},rounds:{},answers:{},
 let state=empty(),me=sessionStorage.getItem(CLASSKEY)||'',draft='',view=new URLSearchParams(location.search).get('view')||'welcome',busy=false,renderKey='',readBusy=false,lastStatus='',joinType='class';
 const classId=name=>'c'+Array.from(new TextEncoder().encode(name.toLowerCase())).map(n=>n.toString(16).padStart(2,'0')).join('');
 const normalizeName=s=>String(s||'').trim().replace(/\s+/g,' ').slice(0,40);
-const classList=()=>Object.entries(state.classes||{}).map(([id,c])=>({id,name:c.name})).sort((a,b)=>a.name.localeCompare(b.name,'ar'));
+const classList=()=>Object.entries(state.classes||{}).map(([id,c])=>({id,name:c.name,role:c.role||((id==='principal')?'principal':id==='academic_vice'?'vice':'class')})).sort((a,b)=>a.name.localeCompare(b.name,'ar'));
+const leagueOf=c=>['principal','vice','teacher'].includes(c.role)?'staff':'class';
+const inLeague=(arr,type)=>arr.filter(c=>leagueOf(c)===type);
 function syncParticipantSession(){
  const token=String(state.sessionKey||'legacy');
  const old=sessionStorage.getItem(SESSIONKEY);
@@ -252,32 +293,44 @@ function setView(v){if(v==='host')v='screen';view=v;let u=new URL(location.href)
 const frame=(label,tag,body)=>`<header><div class="brand">🌍 اليوم العالمي للغذاء · ${label}</div><span class="tag">${tag}</span></header><main class="main">${body}</main><div class="status">${REMOTE?'اتصال بين الأجهزة بعد إعداد قاعدة البيانات':'وضع تجريبي داخل المتصفح نفسه'} ${ESC(lastStatus)}</div>`;
 function choices(i,interactive=false){const binary=Q[i].a.length===2;return `<div class="choices${binary?' binary-choices':''}">${Q[i].a.map((o,n)=>`<button class="choice ${COLOR[n]}" ${interactive?`data-action="answer" data-choice="${n}"`:'disabled'}><span class="abc">${binary?(n===0?'✓':'✕'):ABC[n]}</span><span class="label">${ESC(o)}</span><span class="food">${binary?'':ICON[n]}</span></button>`).join('')}</div>`}
 function questionBody(i,interactive=false){return `<div class="quiz"><div class="question"><h2 class="question-text">${ESC(Q[i].q)}</h2></div>${choices(i,interactive)}</div>${interactive?'':`<div class="clock-chip" id="clockNum">20 ث</div><div class="border-timer" aria-hidden="true"><svg id="timerSvg"><path id="timerPath"/></svg></div>`}`}
-const registered=()=>`<div class="classes">${classList().length?classList().map(c=>`<span class="class-pill">🌿 ${ESC(c.name)}</span>`).join(''):'<span class="class-pill">بانتظار دخول المشاركات…</span>'}</div>`;
-function lobby(){return `<div class="center"><div class="hero-icons"><span>🥦</span><span>🍎</span><span>🥕</span><span>🌽</span><span>🍋</span></div><h1>المشاركات <b>المسجّلات</b></h1><p class="intro">عدد المشاركات المسجلات: ${classList().length}</p>${registered()}<p class="muted">بعد دخول المشاركات تبدأ مرحلة الاستعداد 6 ثوانٍ، ثم السؤال الأول لمدة 20 ثانية.</p></div>`}
+
+function registered(){
+ const all=classList();
+ const part=(type,heading)=>{const rows=inLeague(all,type);return `<div class="lobby-league ${type}"><h2>${heading} <small>${rows.length} مشاركة</small></h2><div class="classes">${rows.length?rows.map(c=>`<span class="class-pill">${type==='class'?'🏫':'🌿'} ${ESC(c.name)}</span>`).join(''):'<span class="class-pill empty">بانتظار المشاركات…</span>'}</div></div>`};
+ return `<div class="lobby-leagues">${part('class','🏫 دوري الصفوف')}${part('staff','👑 دوري الكادر المدرسي')}</div>`;
+}
+function lobby(){return `<div class="center lobby-center"><div class="hero-icons"><span>🥦</span><span>🍎</span><span>🥕</span><span>🌽</span><span>🍋</span></div><h1>المشاركات <b>المسجّلات</b></h1><p class="intro">دوري الصفوف ودوري الكادر المدرسي · ${classList().length} مشاركة</p>${registered()}<p class="muted">استعداد 6 ثوانٍ، ثم 20 ثانية للإجابة على كل سؤال.</p></div>`}
 function ready(){return `<div class="center"><div class="hero-icons"><span>🍓</span><span>🥕</span><span>🥦</span></div><h1 class="ready-dramatic">مستعديييييين؟!</h1><div class="ready-number" id="readyNum">${remaining('ready')}</div><p class="ready-sub">السؤال ${index()+1} يبدأ بعد العدّ التنازلي</p></div>`}
 function emptyRanks(){return '<div class="muted">بانتظار الإجابات…</div>'}
 function rankingList(rows,type='total'){
  const cols=rows.length>10?2:1,lines=Math.max(1,Math.ceil(rows.length/cols));
  return `<div class="rank-list" style="--cols:${cols};--rows:${lines}">${rows.length?rows.map((r,j)=>{let p=type==='total'?rankOf(rows,j):j+1;let secondary=type==='total'?`${r.pct}% · ${r.time?(r.time/1000).toFixed(1)+'ث':'—'}`:r.correct?`${(r.elapsed/1000).toFixed(2)} ثانية`:r.answer?'إجابة خاطئة':'لم يُجب';let primary=type==='total'?`${r.points}/${completed()} نقطة`:r.correct?'صحيحة ✓':r.answer?'خاطئة ✕':'لا إجابة';return `<div class="rank ${p<=3&&(type==='total'||r.correct)?['first','second','third'][p-1]:''}"><span class="medal">${type==='round'&&!r.correct?'—':mark(p)}</span><span class="rank-name">${ESC(r.name)}</span><span class="rank-score">${primary}<small>${secondary}</small></span></div>`}).join(''):emptyRanks()}</div>`
 }
+
+function leagueFast(type,heading,icon){
+ const all=inLeague(roundRows(),type),correct=all.filter(r=>r.correct);
+ const n=correct.length,cols=n>6?3:n>3?2:1,rows=Math.max(1,Math.ceil(n/cols));
+ return `<section class="fast-league ${type}"><div class="fast-league-head"><h3>${icon} ${heading}</h3><span>${n} إجابة صحيحة من ${all.length}</span></div>
+ <div class="league-fast-grid" style="--cols:${cols};--rows:${rows}">${n?correct.map((r,j)=>`<div class="fast-card ${j===0?'fast-first':''}"><div class="fast-rank">${mark(1+correct.filter(x=>x.elapsed<r.elapsed).length)}</div><div class="fast-name">${ESC(r.name)}</div><div class="fast-time">⚡ ${(r.elapsed/1000).toFixed(2)} ثانية</div></div>`).join(''):'<div class="no-winners">لا توجد إجابة صحيحة لهذه الفئة</div>'}</div></section>`;
+}
 function revealSlide(){
  const i=index(),q=Q[i],correct=roundRows().filter(r=>r.correct);
- const total=classList().length;
- const answered=roundRows().filter(r=>r.answer).length;
- const cols=correct.length<=5?Math.max(1,correct.length):correct.length<=12?4:5;
- const rows=Math.max(1,Math.ceil(correct.length/cols));
- return `<section class="reveal-stage">
-   <div class="reveal-head"><span class="reveal-count">السؤال ${i+1} / ${Q.length}</span><span class="reveal-eyebrow">✨ اكتشفنا الحقيقة!</span></div>
-   <div class="reveal-question">${ESC(q.q)}</div>
-   <div class="reveal-answer"><span>✅ الإجابة الصحيحة</span><strong>${ABC[q.ok]} · ${ESC(q.a[q.ok])}</strong></div>
-   <h2 class="winners-heading">⚡ الأسرع من أصحاب الإجابات الصحيحة <small>(${correct.length} من ${total} مشاركة · أجابت ${answered})</small></h2>
-   <div class="fast-grid" style="--fastcols:${cols};--fastrows:${rows}">
-     ${correct.length?correct.map((r,j)=>`<div class="fast-card ${j===0?'fast-first':''}"><div class="fast-rank">${mark(1+correct.filter(x=>x.elapsed<r.elapsed).length)}</div><div class="fast-name">${ESC(r.name)}</div><div class="fast-time">⚡ ${(r.elapsed/1000).toFixed(2)} ثانية</div></div>`).join(''):'<div class="no-winners">لم تُسجّل إجابة صحيحة في هذا السؤال · المحاولة القادمة أجمل 🌿</div>'}
-   </div>
-   <div class="reveal-fact">💡 ${ESC(q.fact)}</div>
+ return `<section class="reveal-stage dual-reveal">
+ <div class="reveal-head"><span class="reveal-count">السؤال ${i+1} / ${Q.length}</span><span class="reveal-eyebrow">✨ اكتشفنا الحقيقة!</span></div>
+ <div class="reveal-question">${ESC(q.q)}</div>
+ <div class="reveal-answer"><span>✅ الإجابة الصحيحة</span><strong>${q.a.length===2?'':ABC[q.ok]+' · '}${ESC(q.a[q.ok])}</strong></div>
+ <h2 class="winners-heading">⚡ الأسرع في الإجابة الصحيحة <small>· ${correct.length} مشاركة صحيحة · فئتان مستقلتان</small></h2>
+ <div class="fast-leagues">${leagueFast('class','دوري الصفوف','🏫')}${leagueFast('staff','دوري الكادر المدرسي','👑')}</div>
+ <div class="reveal-fact">💡 ${ESC(q.fact)}</div>
  </section>`;
 }
-function finale(){let rows=totals(),c=n=>rows[n]||null,podium=(n,kind)=>`<div class="podium-card ${kind}"><div class="emoji">${mark(n+1)}</div><div class="class">${c(n)?ESC(c(n).name):'—'}</div><div class="pts">${c(n)?c(n).points:'0'} / ${Q.length}</div><div>${c(n)?c(n).pct+'%':''}</div></div>`;return `<div class="center" style="gap:8px;justify-content:center"><h1 class="final-title">🏆 أبطال الغذاء الذكي 🏆</h1><p class="muted">الترتيب النهائي: الأكثر إجابات صحيحة ثم الأقل زمنًا للإجابات الصحيحة</p><div class="podium">${podium(1,'second')}${podium(0,'first')}${podium(2,'third')}</div><section class="panel final-list"><h2>✨ القائمة النهائية لجميع الصفوف</h2>${rankingList(rows)}</section></div>`}
+function leagueFinal(type,heading,subtitle){
+ const all=inLeague(totals(),type);
+ const card=(n,cls)=>{const r=all[n];return `<div class="duo-podium-card ${cls}"><span class="duo-medal">${mark(n+1)}</span><strong>${r?ESC(r.name):'—'}</strong><span>${r?`${r.points} / ${Q.length} نقطة`:'لم تُسجّل مشاركة'}</span></div>`};
+ const entries=all.length?all.map((r,i)=>`<div class="duo-rank-chip ${i<3?'top-three':''}"><b>${mark(rankOf(all,i))}</b><span>${ESC(r.name)}</span><strong>${r.points}/${Q.length}</strong></div>`).join(''):'<div class="no-final-league">لا توجد مشاركات في هذه الفئة</div>';
+ return `<section class="league-final ${type}"><div class="league-final-head"><h2>${heading}</h2><p>${subtitle}</p></div><div class="duo-podium">${card(1,'second')}${card(0,'first')}${card(2,'third')}</div><div class="duo-rank-list">${entries}</div></section>`;
+}
+function finale(){return `<div class="dual-final-stage"><h1 class="dual-final-title">🏆 أبطال الغذاء الذكي 🏆</h1><p class="dual-final-sub">بطولتان مستقلتان · الترتيب حسب عدد الإجابات الصحيحة ثم مجموع زمن الإجابات الصحيحة</p><div class="dual-finals">${leagueFinal('class','🏫 دوري الصفوف','👑 الصف الأكثر وعيًا غذائيًا')}${leagueFinal('staff','👑 دوري الكادر المدرسي','✨ سفيرة الوعي الغذائي')}</div></div>`;}
 function teacher(){
  const cls=state.classes?.[me], s=stage();
  if(!cls){
@@ -287,7 +340,7 @@ function teacher(){
      ? `<input id="classInput" maxlength="40" autocomplete="off" placeholder="الاسم اختياري · يمكن المشاركة بالصفة فقط" value="${ESC(draft)}">`
      : `<input id="classInput" required maxlength="40" autocomplete="off" placeholder="${joinType==='teacher'?'اسم المعلمة فقط':'مثال: 12 علمي 2'}" value="${ESC(draft)}">`;
    const quick=joinType==='class' ? `<div class="chips">${['10-1','10-2','11 علمي 1','11 علمي 2','11 علمي 3','12-1','12-2','12-3','12-4'].map(x=>`<button type="button" class="chip" data-action="fill" data-name="${ESC(x)}">${ESC(x)}</button>`).join('')}</div>`:'';
-   return frame('دخول المشاركات','الاسم فقط · دون حسابات',`<div class="center"><form class="join-card" id="joinForm"><h2>🌿 أهلًا بالمشاركات</h2><p class="intro">اختاري فئتك ثم أدخلي الاسم فقط، دون بريد أو كلمة مرور</p><div class="role-choices">${roleButtons}</div>${nameInput}${quick}<button class="btn" type="submit">✨ دخول المسابقة</button></form></div>`);
+   return frame('دخول المشاركات','الاسم فقط · دون حسابات',`<div class="center"><form class="join-card" id="joinForm"><h2>🌿 أهلًا بالمشاركات</h2><p class="intro">اختاري فئتك ثم أدخلي الاسم فقط، دون بريد أو كلمة مرور</p><p class="muted">🏫 الصفوف في دوري مستقل · 👑 المديرة والنائبة والمعلمات في دوري واحد</p><div class="role-choices">${roleButtons}</div>${nameInput}${quick}<button class="btn" type="submit">✨ دخول المسابقة</button></form></div>`);
  }
  const label=ESC(cls.name);
  if(s==='lobby')return frame('جوال المشاركة',label,`<div class="center"><div class="hero-icons"><span>🌱</span><span>🥕</span><span>🍎</span></div><h1>تم تسجيل المشاركة ✓</h1><p class="intro">${label}</p><p class="muted">في انتظار شاشة الاستعداد والسؤال الأول</p></div>`);
